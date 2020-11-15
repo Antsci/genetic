@@ -1,0 +1,15 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'my_random', 'x':387, 'y':530, 'width':114, 'height':122, 'attrs': 'seed', 'meths': '__init__|random_int|random_choice'}
+{'type':'umlshape', 'id':'data', 'x':756, 'y':220, 'width':98, 'height':106, 'attrs': 'departments|times', 'meths': '__init__'}
+{'type':'umlshape', 'id':'population', 'x':31, 'y':121, 'width':120, 'height':139, 'attrs': 'pop', 'meths': '__init__'}
+{'type':'umlshape', 'id':'schedule', 'x':212, 'y':166, 'width':98, 'height':122, 'attrs': 'classes', 'meths': '__init__|get_fitness|start'}
+{'type':'umlshape', 'id':'room', 'x':612, 'y':370, 'width':82, 'height':106, 'attrs': 'size|room_type', 'meths': '__init__'}
+{'type':'umlshape', 'id':'Subject', 'x':565, 'y':70, 'width':154, 'height':122, 'attrs': 'maximum_students|name|qualified_teachers', 'meths': '__init__'}
+{'type':'umlshape', 'id':'teaching_class', 'x':388, 'y':178, 'width':150, 'height':138, 'attrs': 'teacher|room|time|subject', 'meths': '__init__'}
+{'type':'edge', 'id':'Subject_to_teaching_class', 'source':'Subject', 'target':'teaching_class', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'teaching_class_to_schedule', 'source':'teaching_class', 'target':'schedule', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'room_to_teaching_class', 'source':'room', 'target':'teaching_class', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'schedule_to_population', 'source':'schedule', 'target':'population', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'my_random_to_teaching_class', 'source':'my_random', 'target':'teaching_class', 'uml_edge_type': 'association'}
+{'type':'edge', 'id':'data_to_teaching_class', 'source':'data', 'target':'teaching_class', 'uml_edge_type': 'association'}

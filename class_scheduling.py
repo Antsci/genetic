@@ -76,6 +76,11 @@ class data:
         # self.teachers['''list comp to make teacher objects''']
         conn = self.create_connection(database)
         with conn:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM Departments")
+            rows = cur.fetchall()
+            
+
             
 
 class population:
