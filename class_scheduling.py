@@ -78,7 +78,11 @@ class data:
         with conn:
             cur = conn.cursor()
             cur.execute("SELECT * FROM Departments")
-            rows = cur.fetchall()
+            self.departments = cur.fetchall()
+            cur.execute("SELECT * FROM Room Types")
+            self.room_types = cur.fetchall()
+            cur.execute("SELECT * FROM Rooms")
+            self.rooms = cur.fetchall()
             
 
             
