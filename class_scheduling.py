@@ -83,6 +83,8 @@ class data:
             self.room_types = cur.fetchall()
             cur.execute("SELECT * FROM Rooms")
             self.rooms = cur.fetchall()
+            cur.execute("SELECT * FROM Teachers")
+            self.teachers = cur.fetchall()
             
 
             
