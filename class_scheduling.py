@@ -19,8 +19,8 @@ class my_random():
             self.seed = (48271*self.seed) % ((2 ** 31) - 1)
             yield self.seed
 
-    def random_choice(self, deck, randomness):
-        return deck[randomness % len(deck)]
+    def random_choice(self, deck):
+        return deck[next(self.random_int()) % len(deck)]
 
 
 def sorter(moves):
@@ -58,7 +58,6 @@ class data:
     ''' 
     imports data about school from database
     e.g. teachers, time periods, rooms, classes etc 
-    hard coded atm
     '''
     def create_connection(self, db_file):
         conn = None
@@ -69,17 +68,12 @@ class data:
         return conn
 
     def __init__(self):
-        # temporary hardcoded data
-        # self.departments = ["Maths", "Physics", "Chemistry", "Computing"]
-        # self.times = ["M-F 0825-0925", "M-F 0930-1030",
-        #               "M-F 1035-1135", "M-F 1140-1240", "M-T 1345-1445"]
-        # self.teachers['''list comp to make teacher objects''']
         conn = self.create_connection(database)
         with conn:
             cur = conn.cursor()
             cur.execute("SELECT * FROM Departments")
             self.departments = cur.fetchall()
-            cur.execute("SELECT * FROM Room Types")
+            cur.execute("SELECT * FROM Room_Types")
             self.room_types = cur.fetchall()
             cur.execute("SELECT * FROM Rooms")
             self.rooms = cur.fetchall()
@@ -87,7 +81,8 @@ class data:
             self.teachers = cur.fetchall()
             
 
-            
+school_data = data()
+print(school_data.departments)         
 
 class population:
     '''The competing schedules '''
@@ -107,11 +102,10 @@ class schedule:
         my_data = data()
         for i in my_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(p.random_choice(my_data.teachers, next(p.random_int())), p.random_choice(
-                    my_data.times, next(p.random_int())), p.random_choice(my_data.rooms, next(p.random_int())), "year " + str(j) + i))
-
+                self.classes.append(teaching_class())
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
+        
         # 1/conflicts
 
 
@@ -164,7 +158,7 @@ def crossover(self, schedule1, schedule2):
 def muatate(self, schedule):
     random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
-        if p.random_choice(range(10), next(p.random_int()) < mutation_rate):
+        if p.random_choice(range(10)) < mutation_rate:
             schedule.classes[i[0]] = random_schedule.classes[i[0]]
     return schedule
 
@@ -173,9 +167,9 @@ def tournament_selection(self, population):
     ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them'''
     tournament_attendees = population()
     tournament_attendees.pop = [p.random_choice(
-        population.pop, next(p.random_int())) for _ in range(tournament_size)]
+        population.pop) for _ in range(tournament_size)]
     return sorter(tournament_attendees.pop)
 
 
-class table_display:
-    ''' '''
+""" class table_display:
+    ''' ''' """
