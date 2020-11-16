@@ -79,8 +79,8 @@ class data:
             self.rooms = cur.fetchall()
             cur.execute("SELECT * FROM Teachers")
             self.teachers = cur.fetchall()
-            days = ["Mon", "Tue","Wed", "Thu", "Fri"]
-            self.timeslots = [[(u + ' ' + str((i % 12))+":00") for i in range(8,16)] for u in days]
+            days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 1]]
+            self.timeslots = [[(u[0] + ' ' + str((i % 12))+":00") for i in range(8, u[1])] for u in days]
    
 
 class population:
@@ -99,7 +99,7 @@ class schedule:
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), timesa, my_random.random_choice(school_data.rooms), i))
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), my_random.random_choice(school_data.timeslots), my_random.random_choice(school_data.rooms), i))
 
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
