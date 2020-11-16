@@ -23,12 +23,12 @@ class my_random():
         return deck[next(self.random_int()) % len(deck)]
 
 
-def sorter(moves):
+def sorter(move):
     # merge sort
-    if len(moves) > 1:
-        mid_point = len(moves) // 2
-        left_half = moves[:mid_point]
-        right_half = moves[mid_point:]
+    if len(move) > 1:
+        mid_point = len(move) // 2
+        left_half = move[:mid_point]
+        right_half = move[mid_point:]
         sorter(left_half)
         sorter(right_half)
         i, j, k = 0, 0, 0
@@ -48,7 +48,7 @@ def sorter(moves):
             moves[k] = right_half[j]
             j += 1
             k += 1
-    return moves
+    return move
 
 
 p = my_random()
