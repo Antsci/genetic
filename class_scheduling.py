@@ -79,10 +79,9 @@ class data:
             self.rooms = cur.fetchall()
             cur.execute("SELECT * FROM Teachers")
             self.teachers = cur.fetchall()
-            
-
-school_data = data()
-print(school_data.departments)         
+            days = ["Mon", "Tue","Wed", "Thu", "Fri"]
+            self.timeslots = [[(u + ' ' + str((i % 12))+":00") for i in range(8,16)] for u in days]
+   
 
 class population:
     '''The competing schedules '''
@@ -95,17 +94,19 @@ class schedule:
     ''' when, where and with who the class is'''
 
     def __init__(self):
-        self.classes = []
-
-    def start(self):
         '''randomly generates a fully schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
-        my_data = data()
-        for i in my_data.departments:
+        self.classes = []
+        school_data = data()
+        for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class())
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), timesa, my_random.random_choice(school_data.rooms), i))
+
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
-        
+        conflicts = 0
+        for i in 
+
+        return 1/conflicts
         # 1/conflicts
 
 
