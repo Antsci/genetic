@@ -97,18 +97,22 @@ class schedule:
     ''' when, where and with who the class is'''
 
     def __init__(self):
-        '''randomly generates a fully schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
+        '''randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
         self.classes = []
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(p.random_choice(school_data.teachers), p.random_choice(school_data.timeslots), p.random_choice(school_data.rooms), i))
+                self.classes.append(teaching_class(p.random_choice(school_data.teachers), p.random_choice(school_data.timeslots), p.random_choice(school_data.rooms), i, "year "+j+" "+i))
 
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
         conflicts = 0
-        for i in 
-
+        for i in self.classes:
+            for j in self.classes:
+                if (i.time == j.time) and ((i.room == j.room) or (i.teacher == j.teacher)):
+                    if i.name != j.name:
+                        conflicts += 1
+        
         return 1/conflicts
         # 1/conflicts
 
@@ -127,11 +131,12 @@ class Subject:
 
 
 class teaching_class:
-    def __init__(self, teacher, time, room, subject):
+    def __init__(self, teacher, time, room, subject, name):
         self.teacher = teacher
         self.time = time
         self.room = room
         self.subject = subject
+        self.name = name
 
 
 def evolve(self, pop):
