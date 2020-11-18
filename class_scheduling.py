@@ -34,18 +34,18 @@ def sorter(move):
         i, j, k = 0, 0, 0
         while (i < len(left_half)) and (j < len(right_half)):
             if left_half[i].get_fitness() < right_half[j].get_fitness():
-                moves[k] = left_half[i]
+                move[k] = left_half[i]
                 i += 1
             else:
-                moves[k] = right_half[j]
+                move[k] = right_half[j]
                 j += 1
             k += 1
         while i < len(left_half):
-            moves[k] = left_half[i]
+            move[k] = left_half[i]
             i += 1
             k += 1
         while j < len(right_half):
-            moves[k] = right_half[j]
+            move[k] = right_half[j]
             j += 1
             k += 1
     return move
