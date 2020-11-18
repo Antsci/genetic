@@ -81,8 +81,11 @@ class data:
             cur.execute("SELECT * FROM Teachers")
             self.teachers = cur.fetchall()
         days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 13]]
-        self.timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
+        d_timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
+        self.timeslots = [y for x in d_timeslots for y in x]
 
+school_data = data()
+print(school_data.departments)
 
    
 
@@ -102,17 +105,19 @@ class schedule:
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(p.random_choice(school_data.teachers), p.random_choice(school_data.timeslots), p.random_choice(school_data.rooms), i, "year "+j+" "+i))
+                self.classes.append(teaching_class(p.random_choice(school_data.teachers),[p.random_choice(school_data.timeslots) for _ in range(3)], p.random_choice(school_data.rooms), i, "year "+j+" "+i[1]))
 
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
         conflicts = 0
         for i in self.classes:
             for j in self.classes:
-                if (i.time == j.time) and ((i.room == j.room) or (i.teacher == j.teacher)):
+                if (len(set(i.times).intersection(set(j.times))) != 0 ) and ((i.room == j.room) or (i.teacher == j.teacher)):
                     if i.name != j.name:
                         conflicts += 1
-        
+            if len(i.time) > len(set(i.time)):
+                conflicts += 1
+
         return 1/conflicts
         # 1/conflicts
 
@@ -131,9 +136,9 @@ class Subject:
 
 
 class teaching_class:
-    def __init__(self, teacher, time, room, subject, name):
+    def __init__(self, teacher, times, room, subject, name):
         self.teacher = teacher
-        self.time = time
+        self.times = times
         self.room = room
         self.subject = subject
         self.name = name
