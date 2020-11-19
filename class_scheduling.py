@@ -5,7 +5,7 @@ import sqlite3
 mutation_rate = 2
 num_schedules_to_retain = 3
 tournament_size = 4
-database = r"D:\projects\genetic\data\schedule_data.db"
+database = "schedule_data.db"
 
 class my_random():
     '''generator function for LCG method of random number generation'''
