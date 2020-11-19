@@ -8,47 +8,49 @@ tournament_size = 4
 database = "schedule_data.db"
 
 class my_random():
-    '''generator function for LCG method of random number generation'''
+    '''random number generation object, using LCG method'''
     seed = int(time.time())
 
     def __init__(self):
         pass
 
     def random_int(self):
+        '''returns random number, when next() called around it as method of object instance'''
         while True:
             self.seed = (48271*self.seed) % ((2 ** 31) - 1)
             yield self.seed
 
     def random_choice(self, deck):
+        '''returns random selection from given iterable '''
         return deck[next(self.random_int()) % len(deck)]
 
 
-def sorter(move):
-    ''' merge sorter'''
-    if len(move) > 1:
-        mid_point = len(move) // 2
-        left_half = move[:mid_point]
-        right_half = move[mid_point:]
+def sorter(fitnesses):
+    '''recursive implementation of merge sort'''
+    if len(fitnesses) > 1:
+        mid_point = len(fitnesses) // 2
+        left_half = fitnesses[:mid_point]
+        right_half = fitnesses[mid_point:]
         sorter(left_half)
         sorter(right_half)
         i, j, k = 0, 0, 0
         while (i < len(left_half)) and (j < len(right_half)):
             if left_half[i].get_fitness() < right_half[j].get_fitness():
-                move[k] = left_half[i]
+                fitnesses[k] = left_half[i]
                 i += 1
             else:
-                move[k] = right_half[j]
+                fitnesses[k] = right_half[j]
                 j += 1
             k += 1
         while i < len(left_half):
-            move[k] = left_half[i]
+            fitnesses[k] = left_half[i]
             i += 1
             k += 1
         while j < len(right_half):
-            move[k] = right_half[j]
+            fitnesses[k] = right_half[j]
             j += 1
             k += 1
-    return move
+    return fitnesses
 
 
 p = my_random()
@@ -85,7 +87,9 @@ class data:
         self.timeslots = [y for x in d_timeslots for y in x]
 
 school_data = data()
+print(school_data.rooms)
 print(school_data.departments)
+print(school_data.teachers)
 
    
 
@@ -117,24 +121,13 @@ class schedule:
                         conflicts += 1
             if len(i.time) > len(set(i.time)):
                 conflicts += 1
-
+            if i.room[1] != i.subjec[2]:
+                conflicts += 1
+            if i.subject[0] not in i.teacher[1:3]:
+                conflicts += 1
         return 1/conflicts
-        # 1/conflicts
 
-
-class room:
-    def __init__(self, size, room_type):
-        self.size = size
-        self.room_type = room_type
-
-
-class Subject:
-    def __init__(self, name, qualified_teachers, maximum_students):
-        self.name = name
-        self.qualified_teachers = qualified_teachers
-        self.maximum_students = maximum_students
-
-
+        
 class teaching_class:
     def __init__(self, teacher, times, room, subject, name):
         self.teacher = teacher
