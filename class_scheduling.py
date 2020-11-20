@@ -155,10 +155,9 @@ def select_for_mutation(self, population):
 
 
 def crossover(self, schedule1, schedule2):
-    ''' child randomly inherits each characteristic from parents @50/50'''
+    ''' child randomly inherits each characteristic from parents @ 50/50'''
     child = schedule()
-    child.classes = [schedule1.classes[i] if (next(p.random_int(
-    )) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
+    child.classes = [schedule1.classes[i] if (next(p.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     return child
 
 
