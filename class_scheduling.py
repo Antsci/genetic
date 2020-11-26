@@ -101,7 +101,7 @@ class population:
 
 
 class schedule:
-    ''' when, where and with who the class is'''
+    '''A full, usually a week's, timetable initiated with fully random characteristics.'''
 
     def __init__(self):
         '''randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
@@ -129,6 +129,7 @@ class schedule:
 
         
 class teaching_class:
+    '''With who, when, on what and where the class is.'''
     def __init__(self, teacher, times, room, subject, name):
         self.teacher = teacher
         self.times = times
@@ -140,29 +141,26 @@ class teaching_class:
 def evolve(self, pop):
     ''' wrapper func'''
 
-
-def select_for_crossing(self, incoming_population):
-    population_to_be_crossed = population()
-    population_to_be_crossed.pop.append(
-        incoming_population.pop[:num_schedules_to_retain])
-
-
 def select_for_mutation(self, population):
+    '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
     sorted_pop = population()
     sorted_pop.pop = sorter(population.pop)
-    to_be_mutated = sorted_pop.pop[num_schedules_to_retain:]
+    to_be_mutated = sorted_pop.pop[-num_schedules_to_retain:]
+    population_to_be_crossed = population()
+    population_to_be_crossed.pop.append(sorted_pop.pop[:num_schedules_to_retain])
     return to_be_mutated
 
 
 def crossover(self, schedule1, schedule2):
-    ''' child randomly inherits each characteristic from parents @ 50/50'''
+    '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
     child = schedule()
     child.classes = [schedule1.classes[i] if (next(p.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     return child
 
 
-def muatate(self, schedule):
-    random_schedule = schedule.start()
+def mutate(self, schedule):
+    '''Generates a new schedule with random characteristics and at random rate controlled by the mutation rate assigns to the input schedule.'''
+    random_schedule = schedule()
     for i in enumerate(schedule.classes):
         if p.random_choice(range(10)) < mutation_rate:
             schedule.classes[i[0]] = random_schedule.classes[i[0]]
@@ -170,12 +168,12 @@ def muatate(self, schedule):
 
 
 def tournament_selection(self, population):
-    ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them'''
+    ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
     tournament_attendees.pop = [p.random_choice(
         population.pop) for _ in range(tournament_size)]
     return sorter(tournament_attendees.pop)
 
 
-""" class table_display:
-    ''' ''' """
+class table_display:
+    ''' ''' 
