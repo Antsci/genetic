@@ -2,10 +2,10 @@
 import time
 import sqlite3
 # constant zoo
-mutation_rate = 2
-num_schedules_to_retain = 3
-tournament_size = 4
-database = "schedule_data.db"
+MUTATION_RATE = 2
+NUM_SCHEDULES_TO_RETAIN = 3
+TOURNAMENT_SIZE = 4
+DATABASE = "schedule_data.db"
 
 class my_random():
     '''random number generation object, using LCG method'''
@@ -158,9 +158,9 @@ def crossover(self, schedule1, schedule2):
     return child
 
 
-def mutate(self, schedule):
-    '''Generates a new schedule with random characteristics and at random rate controlled by the mutation rate assigns to the input schedule.'''
-    random_schedule = schedule()
+def muatate(self, schedule):
+    ''' Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate '''
+    random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
         if p.random_choice(range(10)) < mutation_rate:
             schedule.classes[i[0]] = random_schedule.classes[i[0]]
