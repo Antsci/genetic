@@ -58,7 +58,7 @@ p = my_random()
 
 class data:
     ''' 
-    imports data about school from database
+    imports data about school from DATABASE
     e.g. teachers, time periods, rooms, classes etc 
     '''
     def create_connection(self, db_file):
@@ -71,7 +71,7 @@ class data:
 
     def __init__(self):
 
-        conn = self.create_connection(database)
+        conn = self.create_connection(DATABASE)
         with conn:
             cur = conn.cursor()
             cur.execute("SELECT * FROM Departments")
@@ -145,9 +145,13 @@ def select_for_mutation(self, population):
     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
     sorted_pop = population()
     sorted_pop.pop = sorter(population.pop)
-    to_be_mutated = sorted_pop.pop[-num_schedules_to_retain:]
+    to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN
+
+:]
     population_to_be_crossed = population()
-    population_to_be_crossed.pop.append(sorted_pop.pop[:num_schedules_to_retain])
+    population_to_be_crossed.pop.append(sorted_pop.pop[:NUM_SCHEDULES_TO_RETAIN
+
+])
     return to_be_mutated
 
 
@@ -162,7 +166,7 @@ def muatate(self, schedule):
     ''' Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate '''
     random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
-        if p.random_choice(range(10)) < mutation_rate:
+        if p.random_choice(range(10)) < MUTATION_RATE:
             schedule.classes[i[0]] = random_schedule.classes[i[0]]
     return schedule
 
@@ -171,7 +175,7 @@ def tournament_selection(self, population):
     ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
     tournament_attendees.pop = [p.random_choice(
-        population.pop) for _ in range(tournament_size)]
+        population.pop) for _ in range(TOURNAMENT_SIZE)]
     return sorter(tournament_attendees.pop)
 
 
