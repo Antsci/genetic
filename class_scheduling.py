@@ -7,7 +7,7 @@ NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 4
 DATABASE = "schedule_data.db"
 
-class my_random():
+class random_number_generator():
     '''random number generation object, using LCG method'''
     seed = int(time.time())
 
@@ -53,7 +53,7 @@ def sorter(fitnesses):
     return fitnesses
 
 
-p = my_random()
+my_random = random_number_generator()
 
 
 class data:
@@ -109,7 +109,7 @@ class schedule:
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(p.random_choice(school_data.teachers),[p.random_choice(school_data.timeslots) for _ in range(3)], p.random_choice(school_data.rooms), i, "year "+j+" "+i[1]))
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+j+" "+i[1]))
 
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
@@ -158,7 +158,7 @@ def select_for_mutation(self, population):
 def crossover(self, schedule1, schedule2):
     '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
     child = schedule()
-    child.classes = [schedule1.classes[i] if (next(p.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
+    child.classes = [schedule1.classes[i] if (next(my_random.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     return child
 
 
@@ -166,7 +166,7 @@ def muatate(self, schedule):
     ''' Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate '''
     random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
-        if p.random_choice(range(10)) < MUTATION_RATE:
+        if my_random.random_choice(range(10)) < MUTATION_RATE:
             schedule.classes[i[0]] = random_schedule.classes[i[0]]
     return schedule
 
@@ -174,7 +174,7 @@ def muatate(self, schedule):
 def tournament_selection(self, population):
     ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
-    tournament_attendees.pop = [p.random_choice(
+    tournament_attendees.pop = [my_random.random_choice(
         population.pop) for _ in range(TOURNAMENT_SIZE)]
     return sorter(tournament_attendees.pop)
 
