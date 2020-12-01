@@ -1,18 +1,17 @@
 
-import time
+from time import time
 import sqlite3
+from tabulate import tabulate
 # constant zoo
 MUTATION_RATE = 2
 NUM_SCHEDULES_TO_RETAIN = 3
-TOURNAMENT_SIZE = 4
+TOURNAMENT_SIZE = 3
 DATABASE = "schedule_data.db"
 
 class random_number_generator():
     '''random number generation object, using LCG method'''
-    seed = int(time.time())
-
     def __init__(self):
-        pass
+        self.seed = int(time.time())
 
     def random_int(self):
         '''returns random number, when next() called around it as method of object instance'''
@@ -138,20 +137,13 @@ class teaching_class:
         self.name = name
 
 
-def evolve(self, pop):
-    ''' wrapper func'''
-
-def select_for_mutation(self, population):
+def select_for_evolution(self, population):
     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
     sorted_pop = population()
     sorted_pop.pop = sorter(population.pop)
-    to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN
-
-:]
+    to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN:]
     population_to_be_crossed = population()
-    population_to_be_crossed.pop.append(sorted_pop.pop[:NUM_SCHEDULES_TO_RETAIN
-
-])
+    population_to_be_crossed.pop.append(sorted_pop.pop[:NUM_SCHEDULES_TO_RETAIN])
     return to_be_mutated
 
 
@@ -174,10 +166,10 @@ def muatate(self, schedule):
 def tournament_selection(self, population):
     ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
-    tournament_attendees.pop = [my_random.random_choice(
-        population.pop) for _ in range(TOURNAMENT_SIZE)]
+    tournament_attendees.pop = [my_random.random_choice(population.pop) for _ in range(TOURNAMENT_SIZE)]
     return sorter(tournament_attendees.pop)
 
 
-class table_display:
+def table_display(population):
     ''' ''' 
+    table = [["Schedule Number", " Fitness"], [population.pop]]
