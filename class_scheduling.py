@@ -137,24 +137,24 @@ class teaching_class:
         self.name = name
 
 
-def select_for_evolution(self, population):
+def select_for_evolution(population):
     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
     sorted_pop = population()
     sorted_pop.pop = sorter(population.pop)
     to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN:]
     population_to_be_crossed = population()
-    population_to_be_crossed.pop.append(sorted_pop.pop[:NUM_SCHEDULES_TO_RETAIN])
+    population_to_be_crossed.pop.append(tournament_selection(population))
     return to_be_mutated
 
 
-def crossover(self, schedule1, schedule2):
+def crossover(schedule1, schedule2):
     '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
     child = schedule()
     child.classes = [schedule1.classes[i] if (next(my_random.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     return child
 
 
-def muatate(self, schedule):
+def muatate(schedule):
     ''' Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate '''
     random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
@@ -163,7 +163,7 @@ def muatate(self, schedule):
     return schedule
 
 
-def tournament_selection(self, population):
+def tournament_selection(population):
     ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
     tournament_attendees.pop = [my_random.random_choice(population.pop) for _ in range(TOURNAMENT_SIZE)]
@@ -171,5 +171,5 @@ def tournament_selection(self, population):
 
 
 def table_display(population):
-    ''' ''' 
+    '''Formats the data into a pretty-print table for outputing. ''' 
     table = [["Schedule Number", " Fitness"], [population.pop]]
