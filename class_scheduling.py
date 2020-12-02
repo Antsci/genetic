@@ -56,10 +56,7 @@ my_random = random_number_generator()
 
 
 class data:
-    ''' 
-    imports data about school from DATABASE
-    e.g. teachers, time periods, rooms, classes etc 
-    '''
+    '''Imports data about school from DATABASE, e.g. teachers, time periods, rooms, classes etc. '''
     def create_connection(self, db_file):
         conn = None
         try:
@@ -96,15 +93,16 @@ class population:
     '''The competing schedules '''
 
     def __init__(self):
-        self.pop = []
+        self.pop = [schedule() for _ in range(10)]
 
 
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
 
-    def __init__(self):
-        '''randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
+    def __init__(self, self_id):
+        '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
         self.classes = []
+        self.id = self_id
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
@@ -124,7 +122,7 @@ class schedule:
                 conflicts += 1
             if i.subject[0] not in i.teacher[1:3]:
                 conflicts += 1
-        return 1/conflicts
+        return 1 / conflicts if conflicts != 0 else 1
 
         
 class teaching_class:
@@ -142,9 +140,12 @@ def select_for_evolution(population):
     sorted_pop = population()
     sorted_pop.pop = sorter(population.pop)
     to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN:]
-    population_to_be_crossed = population()
-    population_to_be_crossed.pop.append(tournament_selection(population))
-    return to_be_mutated
+    to_be_crossed = population()
+    to_be_crossed.pop.append(tournament_selection(population))
+    return to_be_mutated, to_be_crossed
+
+def evolution(population):
+    pass
 
 
 def crossover(schedule1, schedule2):
@@ -155,7 +156,7 @@ def crossover(schedule1, schedule2):
 
 
 def muatate(schedule):
-    ''' Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate '''
+    '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate. '''
     random_schedule = schedule.start()
     for i in enumerate(schedule.classes):
         if my_random.random_choice(range(10)) < MUTATION_RATE:
@@ -164,7 +165,7 @@ def muatate(schedule):
 
 
 def tournament_selection(population):
-    ''' Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
+    '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
     tournament_attendees.pop = [my_random.random_choice(population.pop) for _ in range(TOURNAMENT_SIZE)]
     return sorter(tournament_attendees.pop)
@@ -173,3 +174,9 @@ def tournament_selection(population):
 def table_display(population):
     '''Formats the data into a pretty-print table for outputing. ''' 
     table = [["Schedule Number", " Fitness"], [population.pop]]
+
+def main():
+    competing_population = population()
+    fitnesses = [i.get_fitness() for  i in competing_population]
+    while 1 not in fitnesses:
+        select_for_evolution(competing_population)
