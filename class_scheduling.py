@@ -11,7 +11,7 @@ DATABASE = "schedule_data.db"
 class random_number_generator():
     '''random number generation object, using LCG method'''
     def __init__(self):
-        self.seed = int(time.time())
+        self.seed = int(time())
 
     def random_int(self):
         '''returns random number, when next() called around it as method of object instance'''
