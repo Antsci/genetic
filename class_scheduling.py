@@ -11,7 +11,7 @@ DATABASE = "schedule_data.db"
 class random_number_generator():
     '''random number generation object, using LCG method'''
     def __init__(self):
-        self.seed = int(time.time())
+        self.seed = int(time())
 
     def random_int(self):
         '''returns random number, when next() called around it as method of object instance'''
@@ -82,10 +82,10 @@ class data:
         d_timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
         self.timeslots = [y for x in d_timeslots for y in x]
 
-school_data = data()
-print(school_data.rooms)
-print(school_data.departments)
-print(school_data.teachers)
+# school_data = data()
+# print(school_data.rooms)
+# print(school_data.departments)
+# print(school_data.teachers)
 
    
 
@@ -106,7 +106,7 @@ class schedule:
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+j+" "+i[1]))
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
 
     def get_fitness(self):
         '''returns a calculation of the schedule instance's fitness'''
@@ -124,6 +124,10 @@ class schedule:
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 1
 
+    def get_classes_printable(self):
+       return [i.__dict__ for i in self.classes]
+
+
         
 class teaching_class:
     '''With who, when, on what and where the class is.'''
@@ -134,6 +138,8 @@ class teaching_class:
         self.subject = subject
         self.name = name
 
+    def get_class_printable(self):
+        return self.__dict__
 
 def select_for_evolution(population):
     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
@@ -155,13 +161,13 @@ def crossover(schedule1, schedule2):
     return child
 
 
-def muatate(schedule):
+def mutate(input_schedule):
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate. '''
-    random_schedule = schedule.start()
-    for i in enumerate(schedule.classes):
+    random_schedule = schedule('test')
+    for i in enumerate(input_schedule.classes):
         if my_random.random_choice(range(10)) < MUTATION_RATE:
-            schedule.classes[i[0]] = random_schedule.classes[i[0]]
-    return schedule
+            input_schedule.classes[i[0]] = random_schedule.classes[i[0]]
+    return input_schedule
 
 
 def tournament_selection(population):
@@ -179,4 +185,9 @@ def main():
     competing_population = population()
     fitnesses = [i.get_fitness() for  i in competing_population]
     while 1 not in fitnesses:
-        select_for_evolution(competing_population)
+       to_be_changed = select_for_evolution(competing_population)
+
+#testing
+a = schedule('test')
+print(a.get_classes_printable()[0])
+print(mutate(a).get_classes_printable()[0])
