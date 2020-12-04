@@ -116,12 +116,13 @@ class schedule:
                 if (len(set(i.times).intersection(set(j.times))) != 0 ) and ((i.room == j.room) or (i.teacher == j.teacher)):
                     if i.name != j.name:
                         conflicts += 1
-            if len(i.time) > len(set(i.time)):
+            if len(i.times) > len(set(i.times)):
                 conflicts += 1
-            if i.room[1] != i.subjec[2]:
+            if i.room[1] != i.subject[2]:
                 conflicts += 1
             if i.subject[0] not in i.teacher[1:3]:
                 conflicts += 1
+        return conflicts #test
         return 1 / conflicts if conflicts != 0 else 1
 
     def get_classes_printable(self):
@@ -165,7 +166,9 @@ def mutate(input_schedule):
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate. '''
     random_schedule = schedule('test')
     for i in enumerate(input_schedule.classes):
-        if my_random.random_choice(range(10)) < MUTATION_RATE:
+        a = my_random.random_choice(range(10))
+        print(a)
+        if a < MUTATION_RATE:
             input_schedule.classes[i[0]] = random_schedule.classes[i[0]]
     return input_schedule
 
@@ -189,5 +192,6 @@ def main():
 
 #testing
 a = schedule('test')
-print(a.get_classes_printable()[0])
-print(mutate(a).get_classes_printable()[0])
+# print(a.get_classes_printable())
+# print(mutate(a).get_classes_printable())
+print(a.get_fitness())
