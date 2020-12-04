@@ -93,13 +93,13 @@ class population:
     '''The competing schedules '''
 
     def __init__(self):
-        self.pop = [schedule() for _ in range(10)]
+        self.pop = [schedule(i) for i in range(10)]
 
 
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
 
-    def __init__(self, self_id):
+    def __init__(self, self_id = 'test'):
         '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
         self.classes = []
         self.id = self_id
@@ -186,7 +186,7 @@ def table_display(population):
 
 def main():
     competing_population = population()
-    fitnesses = [i.get_fitness() for  i in competing_population]
+    fitnesses = [i.get_fitness() for  i in competing_population.pop]
     while 1 not in fitnesses:
        to_be_changed = select_for_evolution(competing_population)
 
