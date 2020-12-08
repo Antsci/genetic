@@ -24,32 +24,32 @@ class random_number_generator():
         return deck[next(self.random_int()) % len(deck)]
 
 
-def sorter(fitnesses):
+def sorter(scheds):
     '''recursive implementation of merge sort'''
-    if len(fitnesses) > 1:
-        mid_point = len(fitnesses) // 2
-        left_half = fitnesses[:mid_point]
-        right_half = fitnesses[mid_point:]
+    if len(scheds) > 1:
+        mid_point = len(scheds) // 2
+        left_half = scheds[:mid_point]
+        right_half = scheds[mid_point:]
         sorter(left_half)
         sorter(right_half)
         i, j, k = 0, 0, 0
         while (i < len(left_half)) and (j < len(right_half)):
             if left_half[i].get_fitness() < right_half[j].get_fitness():
-                fitnesses[k] = left_half[i]
+                scheds[k] = left_half[i]
                 i += 1
             else:
-                fitnesses[k] = right_half[j]
+                scheds[k] = right_half[j]
                 j += 1
             k += 1
         while i < len(left_half):
-            fitnesses[k] = left_half[i]
+            scheds[k] = left_half[i]
             i += 1
             k += 1
         while j < len(right_half):
-            fitnesses[k] = right_half[j]
+            scheds[k] = right_half[j]
             j += 1
             k += 1
-    return fitnesses
+    return scheds
 
 
 my_random = random_number_generator()
@@ -92,8 +92,9 @@ class data:
 class population:
     '''The competing schedules '''
 
-    def __init__(self):
-        self.pop = [schedule(i) for i in range(10)]
+    def __init__(self, empty = False):
+        if not empty:
+            self.pops = [schedule(i) for i in range(10)]
 
 
 class schedule:
@@ -142,17 +143,29 @@ class teaching_class:
     def get_class_printable(self):
         return self.__dict__
 
-def select_for_evolution(population):
-    '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
-    sorted_pop = population()
-    sorted_pop.pop = sorter(population.pop)
-    to_be_mutated = sorted_pop.pop[-NUM_SCHEDULES_TO_RETAIN:]
-    to_be_crossed = population()
-    to_be_crossed.pop.append(tournament_selection(population))
-    return to_be_mutated, to_be_crossed
+# def select_for_evolution(population):
+#     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
+#     sorted_pop = population()
+#     sorted_pop.pops = sorter(population.pops)
+#     to_be_mutated = sorted_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]
+#     to_be_crossed = population()
+#     to_be_crossed.pops.append(tournament_selection(population))
+#     return to_be_mutated, to_be_crossed
 
 def evolution(population):
-    pass
+    evolution_population = population(True)
+    while len(evolution_population.pops) < 10:
+        parent1 = tournament_selection(population)
+        parent2 = tournament_selection(population)
+        evolution_population.append(crossover(parent1, parent2))
+    evolution_population.pops = sorter(evolution_population.pops)
+    for i in enumerate(evolution_population.pops[-NUM_SCHEDULES_TO_RETAIN:]):
+        evolution_population.pops[i[0]] = mutate(i[1])
+    return evolution_population
+
+
+   
+
 
 
 def crossover(schedule1, schedule2):
@@ -167,7 +180,7 @@ def mutate(input_schedule):
     random_schedule = schedule('test')
     for i in enumerate(input_schedule.classes):
         a = my_random.random_choice(range(10))
-        print(a)
+        #print(a)
         if a < MUTATION_RATE:
             input_schedule.classes[i[0]] = random_schedule.classes[i[0]]
     return input_schedule
@@ -176,22 +189,25 @@ def mutate(input_schedule):
 def tournament_selection(population):
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
-    tournament_attendees.pop = [my_random.random_choice(population.pop) for _ in range(TOURNAMENT_SIZE)]
-    return sorter(tournament_attendees.pop)
+    tournament_attendees.pops = [my_random.random_choice(population.pops) for _ in range(TOURNAMENT_SIZE)]
+    return sorter(tournament_attendees.pops)
 
 
 def table_display(population):
     '''Formats the data into a pretty-print table for outputing. ''' 
-    table = [["Schedule Number", " Fitness"], [population.pop]]
+    table = [["Schedule Number", " Fitness"], [population.pops]]
 
 def main():
     competing_population = population()
-    fitnesses = [i.get_fitness() for  i in competing_population.pop]
-    while 1 not in fitnesses:
-       to_be_changed = select_for_evolution(competing_population)
+    scheds = [i.get_fitness() for  i in competing_population.pops]
+    while 1 not in scheds:
+        competing_population = evolution(competing_population)
+
 
 #testing
-a = schedule('test')
+a = population()
+print([i.get_fitness() for i in a.pops])
+print([i.get_fitness() for i in sorter(a.pops)])
 # print(a.get_classes_printable())
 # print(mutate(a).get_classes_printable())
-print(a.get_fitness())
+#print(a.get_fitness())
