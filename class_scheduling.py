@@ -13,7 +13,7 @@ class random_number_generator():
     def __init__(self):
         self.seed = int(time())
 
-    def random_int(self):
+    def random_int(self) -> int:
         '''returns random number, when next() called around it as method of object instance'''
         while True:
             self.seed = (48271*self.seed) % ((2 ** 31) - 1)
@@ -24,7 +24,7 @@ class random_number_generator():
         return deck[next(self.random_int()) % len(deck)]
 
 
-def sorter(scheds):
+def sorter(scheds: list) -> list:
     '''recursive implementation of merge sort'''
     if len(scheds) > 1:
         mid_point = len(scheds) // 2
@@ -99,7 +99,6 @@ class population:
 
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
-
     def __init__(self, self_id = 'test'):
         '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
         self.classes = []
@@ -109,7 +108,7 @@ class schedule:
             for j in range(7, 14):
                 self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
 
-    def get_fitness(self):
+    def get_fitness(self) -> float:
         '''returns a calculation of the schedule instance's fitness'''
         conflicts = 0
         for i in self.classes:
@@ -124,7 +123,7 @@ class schedule:
             if i.subject[0] not in i.teacher[1:3]:
                 conflicts += 1
         return conflicts #test
-        return 1 / conflicts if conflicts != 0 else 1
+        #return 1 / conflicts if conflicts != 0 else 1
 
     def get_classes_printable(self):
        return [i.__dict__ for i in self.classes]
@@ -152,7 +151,7 @@ class teaching_class:
 #     to_be_crossed.pops.append(tournament_selection(population))
 #     return to_be_mutated, to_be_crossed
 
-def evolution(population):
+def evolution(population: population) -> population :
     evolution_population = population(True)
     while len(evolution_population.pops) < 10:
         parent1 = tournament_selection(population)
@@ -168,14 +167,14 @@ def evolution(population):
 
 
 
-def crossover(schedule1, schedule2):
+def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
     '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
     child = schedule()
     child.classes = [schedule1.classes[i] if (next(my_random.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     return child
 
 
-def mutate(input_schedule):
+def mutate(input_schedule: schedule) -> schedule:
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate. '''
     random_schedule = schedule('test')
     for i in enumerate(input_schedule.classes):
@@ -186,7 +185,7 @@ def mutate(input_schedule):
     return input_schedule
 
 
-def tournament_selection(population):
+def tournament_selection(population: schedule) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_attendees = population()
     tournament_attendees.pops = [my_random.random_choice(population.pops) for _ in range(TOURNAMENT_SIZE)]
