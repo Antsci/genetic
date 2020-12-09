@@ -125,7 +125,7 @@ class schedule:
         return conflicts #test
         #return 1 / conflicts if conflicts != 0 else 1
 
-    def get_classes_printable(self):
+    def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
 
 
@@ -204,9 +204,9 @@ def main():
 
 
 #testing
-a = population()
-print([i.get_fitness() for i in a.pops])
-print([i.get_fitness() for i in sorter(a.pops)])
+a = schedule()
+# print([i.get_fitness() for i in a.pops])
+# print([i.get_fitness() for i in sorter(a.pops)])
 # print(a.get_classes_printable())
-# print(mutate(a).get_classes_printable())
+print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
