@@ -9,23 +9,23 @@ TOURNAMENT_SIZE = 3
 DATABASE = "genetic/schedule_data.db"
 
 class random_number_generator():
-    '''random number generation object, using LCG method'''
+    '''Random number generation object, using LCG method.'''
     def __init__(self):
         self.seed = int(time())
 
     def random_int(self) -> int:
-        '''returns random number, when next() called around it as method of object instance'''
+        '''Returns random number, when next() called around it as method of object instance.'''
         while True:
             self.seed = (48271*self.seed) % ((2 ** 31) - 1)
             yield self.seed
 
     def random_choice(self, deck):
-        '''returns random selection from given iterable '''
+        '''Returns random selection from given iterable. '''
         return deck[next(self.random_int()) % len(deck)]
 
 
 def sorter(scheds: list) -> list:
-    '''recursive implementation of merge sort'''
+    '''Recursive implementation of merge sort.'''
     if len(scheds) > 1:
         mid_point = len(scheds) // 2
         left_half = scheds[:mid_point]
@@ -56,7 +56,7 @@ my_random = random_number_generator()
 
 
 class data:
-    '''Imports data about school from DATABASE, e.g. teachers, time periods, rooms, classes etc. '''
+    '''Imports data about school from DATABASE, e.g. teachers, time periods, rooms, classes etc.'''
     def create_connection(self, db_file):
         conn = None
         try:
@@ -90,7 +90,7 @@ class data:
    
 
 class population:
-    '''The competing schedules '''
+    '''The competing schedules.'''
 
     def __init__(self, empty = False):
         if not empty:
@@ -100,7 +100,7 @@ class population:
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
     def __init__(self, self_id = 'test'):
-        '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics'''
+        '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics.'''
         self.classes = []
         self.id = self_id
         school_data = data()
@@ -109,7 +109,7 @@ class schedule:
                 self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
 
     def get_fitness(self) -> float:
-        '''returns a calculation of the schedule instance's fitness'''
+        '''Returns a calculation of the schedule instance's fitness.'''
         conflicts = 0
         for i in self.classes:
             for j in self.classes:
@@ -175,7 +175,7 @@ def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
 
 
 def mutate(input_schedule: schedule) -> schedule:
-    '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate. '''
+    '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate.'''
     random_schedule = schedule('test')
     for i in enumerate(input_schedule.classes):
         a = my_random.random_choice(range(10))
@@ -193,7 +193,7 @@ def tournament_selection(population: schedule) -> list:
 
 
 def table_display(population):
-    '''Formats the data into a pretty-print table for outputing. ''' 
+    '''Formats the data into a pretty-print table for outputing.''' 
     table = [["Schedule Number", " Fitness"], [population.pops]]
 
 def main():
