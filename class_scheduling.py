@@ -200,6 +200,7 @@ def main():
     competing_population = population()
     scheds = [i.get_fitness() for  i in competing_population.pops]
     while 1 not in scheds:
+        table_display(competing_population)
         competing_population = evolution(competing_population)
 
 
