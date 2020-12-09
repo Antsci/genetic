@@ -194,7 +194,8 @@ def tournament_selection(population: schedule) -> list:
 
 def table_display(population):
     '''Formats the data into a pretty-print table for outputing.''' 
-    table = [["Schedule Number", " Fitness"], [population.pops]]
+    table = [i.id, i.get_classes_printable for i in population.pops]
+    print(tabulate(table, headers=["table id", "classes"]))
 
 def main():
     competing_population = population()
