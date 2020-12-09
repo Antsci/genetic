@@ -6,7 +6,7 @@ from tabulate import tabulate
 MUTATION_RATE = 2
 NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 3
-DATABASE = "schedule_data.db"
+DATABASE = "genetic/schedule_data.db"
 
 class random_number_generator():
     '''random number generation object, using LCG method'''
