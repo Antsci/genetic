@@ -6,7 +6,7 @@ from tabulate import tabulate
 MUTATION_RATE = 2
 NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 3
-DATABASE = "genetic/schedule_data.db"
+DATABASE = "schedule_data.db"
 
 class random_number_generator():
     '''Random number generation object, using LCG method.'''
@@ -194,7 +194,7 @@ def tournament_selection(population: schedule) -> list:
 
 def table_display(population):
     '''Formats the data into a pretty-print table for outputing.''' 
-    table = [[i.id, i.get_classes_printable] for i in population.pops]
+    table = [[i.id, i.get_classes_printable()[0]] for i in population.pops]
     print(tabulate(table, headers=["table id", "classes"]))
 
 def main():
@@ -206,9 +206,10 @@ def main():
 
 
 #testing
-a = schedule()
+a = population()
+table_display(a)
 # print([i.get_fitness() for i in a.pops])
 # print([i.get_fitness() for i in sorter(a.pops)])
-# print(a.get_classes_printable())
-print(mutate(a).get_classes_printable())
+#print(a.get_classes_printable())
+#print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
