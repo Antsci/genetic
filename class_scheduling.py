@@ -95,7 +95,8 @@ class population:
     def __init__(self, empty = False):
         if not empty:
             self.pops = [schedule(i) for i in range(10)]
-
+        else:
+            self.pops = []
 
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
@@ -151,16 +152,18 @@ class teaching_class:
 #     to_be_crossed.pops.append(tournament_selection(population))
 #     return to_be_mutated, to_be_crossed
 
-def evolution(population: population) -> population :
-    evolution_population = population(True)
-    while len(evolution_population.pops) < 10:
-        parent1 = tournament_selection(population)
-        parent2 = tournament_selection(population)
-        evolution_population.append(crossover(parent1, parent2))
-    evolution_population.pops = sorter(evolution_population.pops)
-    for i in enumerate(evolution_population.pops[-NUM_SCHEDULES_TO_RETAIN:]):
-        evolution_population.pops[i[0]] = mutate(i[1])
-    return evolution_population
+def evolution(pop: population) -> population :
+    evolution_pop = population(True)
+    parent1 = population(True)
+    parent2 = population(True)
+    while len(evolution_pop.pops) < 10:
+        parent1.pops = tournament_selection(population)
+        parent2.pops = tournament_selection(population)
+        evolution_pop.pops.append(crossover(parent1, parent2))
+    evolution_pop.pops = sorter(evolution_pop.pops)
+    for i in enumerate(evolution_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]):
+        evolution_pop.pops[i[0]] = mutate(i[1])
+    return evolution_pop
 
 
    
@@ -185,11 +188,11 @@ def mutate(input_schedule: schedule) -> schedule:
     return input_schedule
 
 
-def tournament_selection(population: schedule) -> list:
+def tournament_selection(tournament_attendees: population) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
-    tournament_attendees = population()
-    tournament_attendees.pops = [my_random.random_choice(population.pops) for _ in range(TOURNAMENT_SIZE)]
-    return sorter(tournament_attendees.pops)
+    tournament_competitors = population(True)
+    tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]
+    return sorter(tournament_competitors.pops)
 
 
 def table_display(population):
@@ -200,16 +203,20 @@ def table_display(population):
 def main():
     competing_population = population()
     sched_fitness = [i.get_fitness() for  i in competing_population.pops]
-    while 1 not in sched_fitness:
+    # while 1 not in sched_fitness:
+    #     table_display(competing_population)
+    #     competing_population = evolution(competing_population)
+    for _ in range(10):
         table_display(competing_population)
         competing_population = evolution(competing_population)
 
 
 #testing
-a = population()
-table_display(a)
+# a = population()
+# table_display(a)
 # print([i.get_fitness() for i in a.pops])
 # print([i.get_fitness() for i in sorter(a.pops)])
 #print(a.get_classes_printable())
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
+main()
