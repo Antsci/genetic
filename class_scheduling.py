@@ -81,13 +81,7 @@ class data:
         days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 13]]
         d_timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
         self.timeslots = [y for x in d_timeslots for y in x]
-
-# school_data = data()
-# print(school_data.rooms)
-# print(school_data.departments)
-# print(school_data.teachers)
-
-   
+  
 
 class population:
     '''The competing schedules.'''
@@ -143,31 +137,19 @@ class teaching_class:
     def get_class_printable(self):
         return self.__dict__
 
-# def select_for_evolution(population):
-#     '''Sorts and selects according to the retention rate and fitness schedules to be mutated.'''
-#     sorted_pop = population()
-#     sorted_pop.pops = sorter(population.pops)
-#     to_be_mutated = sorted_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]
-#     to_be_crossed = population()
-#     to_be_crossed.pops.append(tournament_selection(population))
-#     return to_be_mutated, to_be_crossed
 
 def evolution(pop: population) -> population :
     evolution_pop = population(True)
-    parent1 = population(True)
-    parent2 = population(True)
+    parent1 = schedule()
+    parent2 = schedule()
     while len(evolution_pop.pops) < 10:
-        parent1.pops = tournament_selection(population)
-        parent2.pops = tournament_selection(population)
+        parent1.classes = tournament_selection(pop)
+        parent2.classes = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))
     evolution_pop.pops = sorter(evolution_pop.pops)
     for i in enumerate(evolution_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]):
         evolution_pop.pops[i[0]] = mutate(i[1])
     return evolution_pop
-
-
-   
-
 
 
 def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
@@ -212,11 +194,11 @@ def main():
 
 
 #testing
-# a = population()
+a = population()
 # table_display(a)
-# print([i.get_fitness() for i in a.pops])
-# print([i.get_fitness() for i in sorter(a.pops)])
+print([i.get_fitness() for i in a.pops])
+print([i.get_fitness() for i in sorter(a.pops)])
 #print(a.get_classes_printable())
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
-main()
+#main()
