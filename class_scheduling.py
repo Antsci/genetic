@@ -106,16 +106,16 @@ class schedule:
     def get_fitness(self) -> float:
         '''Returns a calculation of the schedule instance's fitness.'''
         conflicts = 0
-        for i in self.classes:
-            for j in self.classes:
-                if (len(set(i.times).intersection(set(j.times))) != 0 ) and ((i.room == j.room) or (i.teacher == j.teacher)):
-                    if i.name != j.name:
+        for k in self.classes:
+            for l in self.classes:
+                if (len(set(k.times).intersection(set(l.times))) != 0 ) and ((k.room == l.room) or (k.teacher == l.teacher)):
+                    if k.name != l.name:
                         conflicts += 1
-            if len(i.times) > len(set(i.times)):
+            if len(k.times) > len(set(k.times)):
                 conflicts += 1
-            if i.room[1] != i.subject[2]:
+            if k.room[1] != k.subject[2]:
                 conflicts += 1
-            if i.subject[0] not in i.teacher[1:3]:
+            if k.subject[0] not in k.teacher[1:3]:
                 conflicts += 1
         return conflicts #test
         #return 1 / conflicts if conflicts != 0 else 1
@@ -140,12 +140,11 @@ class teaching_class:
 
 def evolution(pop: population) -> population :
     evolution_pop = population(True)
-    parent1 = schedule()
-    parent2 = schedule()
     while len(evolution_pop.pops) < 10:
-        parent1.classes = tournament_selection(pop)
-        parent2.classes = tournament_selection(pop)
+        parent1 = tournament_selection(pop)
+        parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))
+    print(evolution_pop.pops)
     evolution_pop.pops = sorter(evolution_pop.pops)
     for i in enumerate(evolution_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]):
         evolution_pop.pops[i[0]] = mutate(i[1])
@@ -174,7 +173,7 @@ def tournament_selection(tournament_attendees: population) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_competitors = population(True)
     tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]
-    return sorter(tournament_competitors.pops)
+    return sorter(tournament_competitors.pops)[0]
 
 
 def table_display(population):
@@ -189,15 +188,15 @@ def main():
     #     table_display(competing_population)
     #     competing_population = evolution(competing_population)
     for _ in range(10):
-        table_display(competing_population)
+        #table_display(competing_population)
         competing_population = evolution(competing_population)
 
 
 #testing
 a = population()
 # table_display(a)
-print([i.get_fitness() for i in a.pops])
-print([i.get_fitness() for i in sorter(a.pops)])
+#print([i.get_fitness() for i in a.pops])
+#print([i.get_fitness() for i in sorter(a.pops)])
 #print(a.get_classes_printable())
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
