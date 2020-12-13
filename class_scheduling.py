@@ -117,8 +117,7 @@ class schedule:
                 conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:
                 conflicts += 1
-        return conflicts #test
-        #return 1 / conflicts if conflicts != 0 else 1
+        return 1 / conflicts if conflicts != 0 else 1
 
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
@@ -144,7 +143,6 @@ def evolution(pop: population) -> population :
         parent1 = tournament_selection(pop)
         parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))
-    print(evolution_pop.pops)
     evolution_pop.pops = sorter(evolution_pop.pops)
     for i in enumerate(evolution_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]):
         evolution_pop.pops[i[0]] = mutate(i[1])
@@ -189,6 +187,7 @@ def main():
     #     competing_population = evolution(competing_population)
     for _ in range(10):
         #table_display(competing_population)
+        table_display(competing_population)
         competing_population = evolution(competing_population)
 
 
