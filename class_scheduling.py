@@ -95,13 +95,16 @@ class population:
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
     def __init__(self, self_id = 'test'):
-        '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 set 4 maths or y12 physics.'''
+        '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 maths or y12 physics.'''
         self.classes = []
         self.id = self_id
         school_data = data()
         for i in school_data.departments:
             for j in range(7, 14):
-                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers),[my_random.random_choice(school_data.timeslots) for _ in range(3)], my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
+                slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
+                while len(set(slots)) != len(slots):
+                    slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), slots, my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
 
     def get_fitness(self) -> float:
         '''Returns a calculation of the schedule instance's fitness.'''
@@ -111,8 +114,6 @@ class schedule:
                 if (len(set(k.times).intersection(set(l.times))) != 0 ) and ((k.room == l.room) or (k.teacher == l.teacher)):
                     if k.name != l.name:
                         conflicts += 1
-            if len(k.times) > len(set(k.times)):
-                conflicts += 1
             if k.room[1] != k.subject[2]:
                 conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:
@@ -196,7 +197,7 @@ a = population()
 # table_display(a)
 #print([i.get_fitness() for i in a.pops])
 #print([i.get_fitness() for i in sorter(a.pops)])
-#print(a.get_classes_printable())
+ #print(a.get_classes_printable())
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
 main()
