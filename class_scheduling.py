@@ -109,14 +109,15 @@ class schedule:
     def get_fitness(self) -> float:
         '''Returns a calculation of the schedule instance's fitness.'''
         conflicts = 0
-        for k in self.classes:
+        for k in self.classes:#Iterate through the class-list, comparing each class with every other class.
             for l in self.classes:
                 if (len(set(k.times).intersection(set(l.times))) != 0 ) and ((k.room == l.room) or (k.teacher == l.teacher)):
+                    #If they share a time-slot and either a room or a teacher.
                     if k.name != l.name:
                         conflicts += 1
-            if k.room[1] != k.subject[2]:
+            if k.room[1] != k.subject[2]:#If the room is suitable for the subject.
                 conflicts += 1
-            if k.subject[0] not in k.teacher[1:3]:
+            if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 1
 
@@ -139,13 +140,13 @@ class teaching_class:
 
 
 def evolution(pop: population) -> population :
-    evolution_pop = population(True)
-    while len(evolution_pop.pops) < 10:
-        parent1 = tournament_selection(pop)
+    evolution_pop = population(True)#Creates empty population.
+    while len(evolution_pop.pops) < 10: #Whilst the population is less than 10.
+        parent1 = tournament_selection(pop)#Pick two schedules using tournament selection.
         parent2 = tournament_selection(pop)
-        evolution_pop.pops.append(crossover(parent1, parent2))
-    evolution_pop.pops = sorter(evolution_pop.pops)
-    for i in range(len(evolution_pop.pops) - NUM_SCHEDULES_TO_RETAIN, len(evolution_pop.pops)):
+        evolution_pop.pops.append(crossover(parent1, parent2))#cross these two schedules over to produce a child schedule
+    evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
+    for i in range(len(evolution_pop.pops) - NUM_SCHEDULES_TO_RETAIN, len(evolution_pop.pops)):#mutate the least fit schedules 
         evolution_pop.pops[i] = mutate(evolution_pop.pops[i])
     return evolution_pop
 
