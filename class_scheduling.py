@@ -145,34 +145,34 @@ def evolution(pop: population) -> population :
         parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))
     evolution_pop.pops = sorter(evolution_pop.pops)
-    for i in enumerate(evolution_pop.pops[-NUM_SCHEDULES_TO_RETAIN:]):
-        evolution_pop.pops[i[0]] = mutate(i[1])
+    for i in range(len(evolution_pop.pops) - NUM_SCHEDULES_TO_RETAIN, len(evolution_pop.pops)):
+        evolution_pop.pops[i] = mutate(evolution_pop.pops[i])
     return evolution_pop
 
 
 def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
     '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
-    child = schedule()
+    child = schedule()#instantiates the child schedule
     child.classes = [schedule1.classes[i] if (next(my_random.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
-    return child
+    #A list comprehension that generates a random integer, if said integer is even then the child uses parent1's values for that class, else it uses parent2's values.
+    return child #Returns the child schedule with the new class list as determined by the previous line.
 
 
 def mutate(input_schedule: schedule) -> schedule:
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate.'''
-    random_schedule = schedule('test')
-    for i in enumerate(input_schedule.classes):
-        a = my_random.random_choice(range(10))
-        #print(a)
-        if a < MUTATION_RATE:
-            input_schedule.classes[i[0]] = random_schedule.classes[i[0]]
+    random_schedule = schedule()#instantiates a new schedule with random characteristics.
+    for i in range(len(input_schedule.classes)):#Iterates through the random schedule's classes. 
+        a = my_random.random_choice(range(10))#Randomly picks a number 0-9.
+        if a < MUTATION_RATE:#If said number is below this then replace the input schedule's class at this indice with a random one.
+            input_schedule.classes[i] = random_schedule.classes[i]
     return input_schedule
 
 
 def tournament_selection(tournament_attendees: population) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
-    tournament_competitors = population(True)
-    tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]
-    return sorter(tournament_competitors.pops)[0]
+    tournament_competitors = population(True)#instantiates an empty population container.
+    tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]#Randomly selects schedules from the general populace.
+    return sorter(tournament_competitors.pops)[0]#Return the fittest of the selected schedules.
 
 
 def table_display(population):
