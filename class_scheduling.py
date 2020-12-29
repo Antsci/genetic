@@ -8,6 +8,7 @@ NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 3
 DATABASE = "schedule_data.db"
 
+
 class random_number_generator():
     '''Random number generation object, using LCG method.'''
     def __init__(self):
@@ -25,17 +26,19 @@ class random_number_generator():
         '''Returns random selection from given iterable. '''
         return deck[next(self.random_int()) % len(deck)]#Casts the random output into the given modulos 
 
+my_random = random_number_generator()
 
 def sorter(scheds: list) -> list:
     '''Recursive implementation of merge sort.'''
-    if len(scheds) > 1:
-        mid_point = len(scheds) // 2
-        left_half = scheds[:mid_point]
+    if len(scheds) > 1:#Base case of when the list is completely split.
+        mid_point = len(scheds) // 2 #uses integer division due to how python handles indice slicing.
+        left_half = scheds[:mid_point]#split the list in two.
         right_half = scheds[mid_point:]
-        sorter(left_half)
+        sorter(left_half)#recursion till the list is split.
         sorter(right_half)
         i, j, k = 0, 0, 0
         while (i < len(left_half)) and (j < len(right_half)):
+            #iterates through each sublist comparing the values of each element to combine them in order.
             if left_half[i].get_fitness() < right_half[j].get_fitness():
                 scheds[k] = left_half[i]
                 i += 1
@@ -44,6 +47,7 @@ def sorter(scheds: list) -> list:
                 j += 1
             k += 1
         while i < len(left_half):
+            #now the sublist have had the cross-lying elements dealt with, the remaining elements can be added with without risk now.
             scheds[k] = left_half[i]
             i += 1
             k += 1
@@ -52,9 +56,6 @@ def sorter(scheds: list) -> list:
             j += 1
             k += 1
     return scheds
-
-
-my_random = random_number_generator()
 
 
 class data:
@@ -94,6 +95,7 @@ class population:
         else:
             self.pops = []
 
+
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
     def __init__(self, self_id = 'test'):
@@ -108,6 +110,7 @@ class schedule:
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
                 self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), slots, my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
                 #Generates a class with a randomly selected room, teacher and timeslot.
+
 
     def get_fitness(self) -> float:
         '''Returns a calculation of the schedule instance's fitness.'''
@@ -129,7 +132,6 @@ class schedule:
        return [i.__dict__ for i in self.classes]
        #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
 
-
         
 class teaching_class:
     '''With who, when, on what and where the class is.'''
@@ -142,7 +144,7 @@ class teaching_class:
 
     def get_class_printable(self):
         return self.__dict__
-
+         #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
 
 def evolution(pop: population) -> population :
     evolution_pop = population(True)#Creates empty population.
