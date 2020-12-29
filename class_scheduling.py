@@ -11,17 +11,19 @@ DATABASE = "schedule_data.db"
 class random_number_generator():
     '''Random number generation object, using LCG method.'''
     def __init__(self):
-        self.seed = int(time())
+        self.seed = int(time())#Sets the seed to the integer number of seconds since epoch, January 1, 1970, 00:00:00.
 
     def random_int(self) -> int:
         '''Returns random number, when next() called around it as method of object instance.'''
+        #This function is a generator which means it maintains its state between calls.
+        #Therefore each time it computes the seed based based on the previous one.
         while True:
-            self.seed = (48271*self.seed) % ((2 ** 31) - 1)
+            self.seed = (48271*self.seed) % ((2 ** 31) - 1)#These coefficents are taken from the C++11 implementation of minstd_rand.
             yield self.seed
 
     def random_choice(self, deck):
         '''Returns random selection from given iterable. '''
-        return deck[next(self.random_int()) % len(deck)]
+        return deck[next(self.random_int()) % len(deck)]#Casts the random output into the given modulos 
 
 
 def sorter(scheds: list) -> list:
@@ -87,7 +89,7 @@ class population:
     '''The competing schedules.'''
 
     def __init__(self, empty = False):
-        if not empty:
+        if not empty:#Unless declared on instantiation, fill the population container with new schedules.
             self.pops = [schedule(i) for i in range(10)]
         else:
             self.pops = []
@@ -98,13 +100,14 @@ class schedule:
         '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 maths or y12 physics.'''
         self.classes = []
         self.id = self_id
-        school_data = data()
-        for i in school_data.departments:
+        school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
+        for i in school_data.departments:#Generates a class for each year for each subject.
             for j in range(7, 14):
-                slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
+                slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
                 while len(set(slots)) != len(slots):
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
                 self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), slots, my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
+                #Generates a class with a randomly selected room, teacher and timeslot.
 
     def get_fitness(self) -> float:
         '''Returns a calculation of the schedule instance's fitness.'''
@@ -120,9 +123,11 @@ class schedule:
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 1
+        #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
+       #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
 
 
         
