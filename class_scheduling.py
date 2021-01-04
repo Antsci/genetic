@@ -82,8 +82,9 @@ class data:
             self.teachers = cur.fetchall()
             cur.execute("SELECT * FROM Days")
             days = cur.fetchall()
-        #days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 13]]#
-        d_timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
+        d_timeslots = [[(u[0] + ' ' + str((i))+":00") for i in range(8, u[1])] for u in days]
+        #Iterate through each day in the list, for each day generate a time slot with the day name and start time for each hour between 8 and the day's end.
+
         self.timeslots = [y for x in d_timeslots for y in x]
   
 
