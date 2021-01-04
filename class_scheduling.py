@@ -2,7 +2,7 @@
 from time import time
 import sqlite3
 from tabulate import tabulate
-# constant zoo
+#Constant Zoo
 MUTATION_RATE = 2
 NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 3
@@ -24,21 +24,21 @@ class random_number_generator():
 
     def random_choice(self, deck):
         '''Returns random selection from given iterable. '''
-        return deck[next(self.random_int()) % len(deck)]#Casts the random output into the given modulos 
+        return deck[next(self.random_int()) % len(deck)]#Casts the random output into the given modulus base for use as an indice.
 
 my_random = random_number_generator()
 
 def sorter(scheds: list) -> list:
     '''Recursive implementation of merge sort.'''
     if len(scheds) > 1:#Base case of when the list is completely split.
-        mid_point = len(scheds) // 2 #uses integer division due to how python handles indice slicing.
-        left_half = scheds[:mid_point]#split the list in two.
+        mid_point = len(scheds) // 2 #Uses integer division due to how python handles indice slicing.
+        left_half = scheds[:mid_point]#Split the list in two.
         right_half = scheds[mid_point:]
-        sorter(left_half)#recursion till the list is split.
+        sorter(left_half)#Recurses till the list is split.
         sorter(right_half)
         i, j, k = 0, 0, 0
         while (i < len(left_half)) and (j < len(right_half)):
-            #iterates through each sublist comparing the values of each element to combine them in order.
+            #Iterates through each sublist comparing the values of each element to combine them in order.
             if left_half[i].get_fitness() < right_half[j].get_fitness():
                 scheds[k] = left_half[i]
                 i += 1
@@ -47,7 +47,7 @@ def sorter(scheds: list) -> list:
                 j += 1
             k += 1
         while i < len(left_half):
-            #now the sublist have had the cross-lying elements dealt with, the remaining elements can be added with without risk now.
+            #Now the sublist have had the cross-lying elements dealt with, the remaining elements can be added with without risk now.
             scheds[k] = left_half[i]
             i += 1
             k += 1
@@ -62,16 +62,15 @@ class data:
     '''Imports data about school from DATABASE, e.g. teachers, time periods, rooms, classes etc.'''
     def create_connection(self, db_file):
         conn = None
-        try:
+        try:#Attempt to open the database file.
             conn = sqlite3.connect(db_file)
-        except sqlite3.Error as e:
+        except sqlite3.Error as e:#Catches a raised error, e.g. for bad filepath or corrupted DB, and displays it.
             print(e)
         return conn
 
     def __init__(self):
-
-        conn = self.create_connection(DATABASE)
-        with conn:
+        conn = self.create_connection(DATABASE)#Create a connection to the database. 
+        with conn:#Using this connection retrive the data from the relevant tables into attributes of this class.
             cur = conn.cursor()
             cur.execute("SELECT * FROM Departments")
             self.departments = cur.fetchall()
@@ -81,7 +80,9 @@ class data:
             self.rooms = cur.fetchall()
             cur.execute("SELECT * FROM Teachers")
             self.teachers = cur.fetchall()
-        days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 13]]
+            cur.execute("SELECT * FROM Days")
+            days = cur.fetchall()
+        #days = [["Mon", 16], ["Tue", 16],["Wed", 16], ["Thu", 16], ["Fri", 13]]#
         d_timeslots = [[(u[0] + ' ' + str((i % 12))+":00").replace(" 0:00", " 12:00") for i in range(8, u[1])] for u in days]
         self.timeslots = [y for x in d_timeslots for y in x]
   
@@ -127,6 +128,9 @@ class schedule:
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 1
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
+
+    def __str__(self):
+        return str(self.get_classes_printable())
 
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
@@ -201,11 +205,11 @@ def main():
 
 
 #testing
-a = population()
-# table_display(a)
+a = schedule()
+print(a)
 #print([i.get_fitness() for i in a.pops])
 #print([i.get_fitness() for i in sorter(a.pops)])
- #print(a.get_classes_printable())
+#print(a.get_classes_printable())
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
-main()
+#main()
