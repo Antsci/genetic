@@ -215,4 +215,5 @@ def main():
 #print(a.get_classes_printable()) 
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
-main()
+if __name__ == '__main__':
+    main()
