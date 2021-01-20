@@ -205,7 +205,8 @@ def main():
     #     input()
     #     table_display(competing_population)
     #     competing_population = evolution(competing_population)
-    table_display(competing_population)
+    #table_display(competing_population)
+    print(sorter(competing_population.pops)[-1])
 
 #testing
 # a = schedule()
