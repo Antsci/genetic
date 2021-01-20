@@ -1,4 +1,3 @@
-
 from time import time
 import sqlite3
 from tabulate import tabulate
@@ -105,7 +104,7 @@ class schedule:
         self.id = self_id
         school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
         for i in school_data.departments:#Generates a class for each year for each subject.
-            for j in range(7, 14):
+            for j in range(7, 8):
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
                 while len(set(slots)) != len(slots):
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
@@ -189,17 +188,18 @@ def tournament_selection(tournament_attendees: population) -> list:
 
 def table_display(population):
     '''Formats the data into a pretty-print table for outputing.''' 
-    table = [[i.id, i.get_fitness(), i.get_classes_printable()[0]] for i in population.pops]
+    table = [[i.id, i.get_fitness(), i.get_classes_printable()] for i in population.pops]
     print(tabulate(table, headers=["Table Id","Fitness" "Classes"]))
 
 def main():
     competing_population = population()
-    sched_fitness = [i.get_fitness() for  i in competing_population.pops]
+    #sched_fitness = [i.get_fitness() for  i in competing_population.pops]
     #while 1 not in sched_fitness:
     #     table_display(competing_population)
     #     input()
     #     competing_population = evolution(competing_population)
     for _ in range(10):
+        input()
         table_display(competing_population)
         competing_population = evolution(competing_population)
 
@@ -209,7 +209,7 @@ def main():
 # print(a)
 #print([i.get_fitness() for i in a.pops])
 #print([i.get_fitness() for i in sorter(a.pops)])
-#print(a.get_classes_printable())
+#print(a.get_classes_printable()) 
 #print(mutate(a).get_classes_printable())
 #print(a.get_fitness())
 main()
