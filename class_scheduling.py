@@ -194,12 +194,12 @@ def table_display(population):
 
 def main():
     competing_population = population()
-    #sched_fitness = [i.get_fitness() for  i in competing_population.pops]
-    # while 1 not in sched_fitness:
+    sched_fitness = [i.get_fitness() for  i in competing_population.pops]
+    #while 1 not in sched_fitness:
     #     table_display(competing_population)
+    #     input()
     #     competing_population = evolution(competing_population)
     for _ in range(10):
-        #table_display(competing_population)
         table_display(competing_population)
         competing_population = evolution(competing_population)
 
