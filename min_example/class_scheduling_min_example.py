@@ -2,8 +2,7 @@ from time import time
 import sqlite3
 from tabulate import tabulate
 #Constant Zoo
-MUTATION_RATE = 5
-NUM_SCHEDULES_TO_RETAIN = 3
+MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
@@ -87,7 +86,7 @@ class data:
         #Iterate through each day in the list, for each day generate a time slot with the day name and start time for each hour between 8 and the day's end.
         self.timeslots = [y for x in d_timeslots for y in x] #flattens d_timeslots into 1D list.
   
-
+school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
 class population:
     '''The competing schedules.'''
 
@@ -104,7 +103,6 @@ class schedule:
         '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 maths or y12 physics.'''
         self.classes = []
         self.id = self_id
-        school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
         for i in school_data.departments:#Generates a class for each year for each subject.
             for j in range(7, 9):
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
@@ -159,7 +157,7 @@ def evolution(pop: population) -> population :
         parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))#cross these two schedules over to produce a child schedule
     evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
-    for i in range(len(evolution_pop.pops) - NUM_SCHEDULES_TO_RETAIN, len(evolution_pop.pops)):#mutate the least fit schedules 
+    for i in range(POPULATION_SIZE - 2 * ELITE):#mutate the least fit schedules 
         evolution_pop.pops[i] = mutate(evolution_pop.pops[i])
     evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
     return evolution_pop
@@ -199,13 +197,13 @@ def main():
     competing_population = population()
     sched_fitness = [i.get_fitness() for  i in competing_population.pops]
     while 1 not in sched_fitness:
-        #table_display(competing_population)
+        # #table_display(competing_population)
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for  i in competing_population.pops]
         print(sorter(competing_population.pops)[-1])
         print('-'*250)
         print(sorter(competing_population.pops)[-1].get_fitness())
-        input()
+        #input()
     print(sorter(competing_population.pops)[-1])
 
 #testing
