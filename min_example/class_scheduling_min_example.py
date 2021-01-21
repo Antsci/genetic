@@ -153,7 +153,7 @@ class teaching_class:
 
 def evolution(pop: population) -> population :
     evolution_pop = population(True)#Creates empty population.
-    evolution_pop.pops += sorter(pop.pops)[:ELITE]
+    evolution_pop.pops += sorter(pop.pops)[-ELITE:]
     while len(evolution_pop.pops) < POPULATION_SIZE: #Whilst the population is less than POPULATION_SIZE.
         parent1 = tournament_selection(pop)#Pick two schedules using tournament selection.
         parent2 = tournament_selection(pop)
@@ -202,10 +202,10 @@ def main():
         #table_display(competing_population)
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for  i in competing_population.pops]
-        # print(sorter(competing_population.pops)[-1])
-        # print('-'*250)
-        # print(sorter(competing_population.pops)[-1].get_fitness())
-        # input()
+        print(sorter(competing_population.pops)[-1])
+        print('-'*250)
+        print(sorter(competing_population.pops)[-1].get_fitness())
+        input()
     print(sorter(competing_population.pops)[-1])
 
 #testing
