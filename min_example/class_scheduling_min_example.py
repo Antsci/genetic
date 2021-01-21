@@ -6,6 +6,7 @@ MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
+LAST_YEAR = 9
 DATABASE = "min_example/class_scheduling_min_example.db"
 
 
@@ -104,7 +105,7 @@ class schedule:
         self.classes = []
         self.id = self_id
         for i in school_data.departments:#Generates a class for each year for each subject.
-            for j in range(7, 9):
+            for j in range(7, LAST_YEAR):
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
                 while len(set(slots)) != len(slots):
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
@@ -122,7 +123,8 @@ class schedule:
                     if k.name != l.name:
                         conflicts += 1
             if k.room[1] != k.subject[2]:#If the room is suitable for the subject.
-                conflicts += 1
+                if (k.subject[2] != 'Default'):
+                    conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 1
@@ -194,17 +196,20 @@ def table_display(population):
     print(tabulate(table, headers=["Fitness", "Classes"]))
 
 def main():
+    gen = 0
     competing_population = population()
     sched_fitness = [i.get_fitness() for  i in competing_population.pops]
     while 1 not in sched_fitness:
+        gen += 1
         # #table_display(competing_population)
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for  i in competing_population.pops]
         print(sorter(competing_population.pops)[-1])
         print('-'*250)
         print(sorter(competing_population.pops)[-1].get_fitness())
-        #input()
+        input()
     print(sorter(competing_population.pops)[-1])
+    print(gen)
 
 #testing
 # a = schedule()
