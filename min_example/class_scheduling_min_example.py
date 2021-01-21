@@ -7,7 +7,7 @@ TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 9
-DATABASE = "min_example/class_scheduling_min_example.db"
+DATABASE = "genetic/min_example/class_scheduling_min_example.db"
 
 
 class random_number_generator():
@@ -204,12 +204,12 @@ def main():
         # #table_display(competing_population)
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for  i in competing_population.pops]
-        print(sorter(competing_population.pops)[-1])
-        print('-'*250)
-        print(sorter(competing_population.pops)[-1].get_fitness())
-        input()
+        # print(sorter(competing_population.pops)[-1])
+        # print('-'*250)
+        # print(sorter(competing_population.pops)[-1].get_fitness())
+        # input()
     print(sorter(competing_population.pops)[-1])
-    print(gen)
+    print("generation: " +str(gen))
 
 #testing
 # a = schedule()
