@@ -6,7 +6,7 @@ MUTATION_RATE = 5
 NUM_SCHEDULES_TO_RETAIN = 3
 TOURNAMENT_SIZE = 3
 ELITE = 1
-POPULATION_SIZE = 15
+POPULATION_SIZE = 10
 DATABASE = "min_example/class_scheduling_min_example.db"
 
 
@@ -106,7 +106,7 @@ class schedule:
         self.id = self_id
         school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
         for i in school_data.departments:#Generates a class for each year for each subject.
-            for j in range(7, 8):
+            for j in range(7, 9):
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
                 while len(set(slots)) != len(slots):
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
