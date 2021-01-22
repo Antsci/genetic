@@ -127,12 +127,12 @@ class schedule:
                     conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
-        return 1 / conflicts if conflicts != 0 else 1
+        return 1 / conflicts if conflicts != 0 else True
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
     def __str__(self):
         return str(self.get_classes_printable())
-
+        
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
        #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
@@ -199,7 +199,7 @@ def main():
     gen = 0
     competing_population = population()
     sched_fitness = [i.get_fitness() for  i in competing_population.pops]
-    while 1 not in sched_fitness:
+    while True not in sched_fitness:
         gen += 1
         # #table_display(competing_population)
         competing_population = evolution(competing_population)
