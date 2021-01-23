@@ -1,12 +1,15 @@
 from time import time
 import sqlite3
-#from tabulate import tabulate
+try:
+    from tabulate import tabulate
+except ImportError:
+    print("Tabulate libray required and missing, install with 'pip install tabulate'.")
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
-LAST_YEAR = 9
+LAST_YEAR = 10
 DATABASE = "genetic/min_example/class_scheduling_min_example.db"
 
 
@@ -189,25 +192,26 @@ def tournament_selection(tournament_attendees: population) -> list:
     return sorter(tournament_competitors.pops)[-1]#Return the fittest of the selected schedules.
 
 
-# def table_display(population):
-#     '''Formats the data into a pretty-print table for outputing.''' 
-#     table = [[i.get_fitness(), i.get_classes_printable()] for i in sorter(population.pops)]
-#     print(tabulate(table, headers=["Fitness", "Classes"]))
+def table_display(sched):
+    '''Formats the data into a pretty-print table for outputing.''' 
+    table = [[teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
+    print(tabulate(table, headers=[feature for feature in sched.get_classes_printable()[0]]))
 
 def main():
     gen = 0
     competing_population = population()
-    sched_fitness = [i.get_fitness() for  i in competing_population.pops]
+    sched_fitness = [i.get_fitness() for i in competing_population.pops]
     while True not in sched_fitness:
         gen += 1
         # #table_display(competing_population)
         competing_population = evolution(competing_population)
-        sched_fitness = [i.get_fitness() for  i in competing_population.pops]
+        sched_fitness = [i.get_fitness() for i in competing_population.pops]
         # print(sorter(competing_population.pops)[-1])
         # print('-'*250)
         # print(sorter(competing_population.pops)[-1].get_fitness())
         # input()
-    print(sorter(competing_population.pops)[-1])
+    #print(sorter(competing_population.pops)[-1])
+    table_display(sorter(competing_population.pops)[-1])
     print("generation: " +str(gen))
 
 #testing
