@@ -129,7 +129,7 @@ class schedule:
         return 1 / conflicts if conflicts != 0 else True
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
-    def __str__(self):
+    def __str__(self):#Allows schedule to be directly printed using python magic methods
         return str(self.get_classes_printable())
         
     def get_classes_printable(self) -> list:
@@ -186,7 +186,7 @@ def tournament_selection(tournament_attendees: population) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
     tournament_competitors = population(True)#instantiates an empty population container.
     tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]#Randomly selects schedules from the general populace.
-    return sorter(tournament_competitors.pops)[0]#Return the fittest of the selected schedules.
+    return sorter(tournament_competitors.pops)[-1]#Return the fittest of the selected schedules.
 
 
 # def table_display(population):
