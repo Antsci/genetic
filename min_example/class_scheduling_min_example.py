@@ -125,11 +125,10 @@ class schedule:
                     if k.name != l.name:
                         conflicts += 1
             if k.room[1] != k.subject[2]:#If the room is suitable for the subject.
-                if (k.subject[2] != 'Default'):
-                    conflicts += 1
+                conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
-        return 1 / conflicts if conflicts != 0 else True
+        return 1 / conflicts if conflicts != 0 else 2
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
     def __str__(self):#Allows schedule to be directly printed using python magic methods
@@ -195,13 +194,13 @@ def tournament_selection(tournament_attendees: population) -> list:
 def table_display(sched):
     '''Formats the data into a pretty-print table for outputing.''' 
     table = [[teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
-    print(tabulate(table, headers=[feature for feature in sched.get_classes_printable()[0]]))
+    print(tabulate(table, headers=[feature.upper() for feature in sched.get_classes_printable()[0]]))
 
 def main():
     gen = 0
     competing_population = population()
     sched_fitness = [i.get_fitness() for i in competing_population.pops]
-    while True not in sched_fitness:
+    while 2 not in sched_fitness:
         gen += 1
         # #table_display(competing_population)
         competing_population = evolution(competing_population)
