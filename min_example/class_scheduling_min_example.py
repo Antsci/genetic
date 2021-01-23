@@ -1,6 +1,6 @@
 from time import time
 import sqlite3
-from tabulate import tabulate
+#from tabulate import tabulate
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
@@ -93,17 +93,16 @@ class population:
 
     def __init__(self, empty = False):
         if not empty:#Unless declared on instantiation, fill the population container with new schedules.
-            self.pops = [schedule(i) for i in range(POPULATION_SIZE)]
+            self.pops = [schedule() for i in range(POPULATION_SIZE)]
         else:
             self.pops = []
 
 
 class schedule:
     '''A full, usually a week's, timetable initiated with fully random characteristics.'''
-    def __init__(self, self_id = 'test'):
+    def __init__(self):
         '''Randomly generates a full schedule, with random variables(teacher, room, time) for each class like y9 maths or y12 physics.'''
         self.classes = []
-        self.id = self_id
         for i in school_data.departments:#Generates a class for each year for each subject.
             for j in range(7, LAST_YEAR):
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
@@ -190,10 +189,10 @@ def tournament_selection(tournament_attendees: population) -> list:
     return sorter(tournament_competitors.pops)[0]#Return the fittest of the selected schedules.
 
 
-def table_display(population):
-    '''Formats the data into a pretty-print table for outputing.''' 
-    table = [[i.get_fitness(), i.get_classes_printable()] for i in sorter(population.pops)]
-    print(tabulate(table, headers=["Fitness", "Classes"]))
+# def table_display(population):
+#     '''Formats the data into a pretty-print table for outputing.''' 
+#     table = [[i.get_fitness(), i.get_classes_printable()] for i in sorter(population.pops)]
+#     print(tabulate(table, headers=["Fitness", "Classes"]))
 
 def main():
     gen = 0
