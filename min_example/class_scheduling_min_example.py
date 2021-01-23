@@ -1,5 +1,6 @@
 from time import time
 import sqlite3
+#Error catching try-except statement for external library presence.
 try:
     from tabulate import tabulate
 except ImportError:
