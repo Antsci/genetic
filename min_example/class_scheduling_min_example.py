@@ -202,24 +202,11 @@ def main():
     sched_fitness = [i.get_fitness() for i in competing_population.pops]
     while 2 not in sched_fitness:
         gen += 1
-        # #table_display(competing_population)
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for i in competing_population.pops]
-        # print(sorter(competing_population.pops)[-1])
-        # print('-'*250)
-        # print(sorter(competing_population.pops)[-1].get_fitness())
-        # input()
-    #print(sorter(competing_population.pops)[-1])
     table_display(sorter(competing_population.pops)[-1])
     print("generation: " +str(gen))
 
-#testing
-# a = schedule()
-# print(a)
-#print([i.get_fitness() for i in a.pops])
-#print([i.get_fitness() for i in sorter(a.pops)])
-#print(a.get_classes_printable()) 
-#print(mutate(a).get_classes_printable())
-#print(a.get_fitness())
+
 if __name__ == '__main__':
     main()
