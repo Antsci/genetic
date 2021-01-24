@@ -199,14 +199,16 @@ def table_display(sched):
 
 def main():
     gen = 0
+    print("Creating intial population... ")
     competing_population = population()
     sched_fitness = [i.get_fitness() for i in competing_population.pops]
+    print("Optimising timetables... ")
     while 2 not in sched_fitness:
         gen += 1
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for i in competing_population.pops]
     table_display(sorter(competing_population.pops)[-1])
-    print("generation: " +str(gen))
+    print("This input took " + str(gen) + " generations to find a solution." )
 
 
 if __name__ == '__main__':
