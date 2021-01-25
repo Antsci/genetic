@@ -194,7 +194,7 @@ def tournament_selection(tournament_attendees: population) -> list:
 
 def table_display(sched):
     '''Formats the data into a pretty-print table for outputing.''' 
-    table = [[teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
+    table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
     print(tabulate(table, headers=[feature.upper() for feature in sched.get_classes_printable()[0]]))
 
 def main():
