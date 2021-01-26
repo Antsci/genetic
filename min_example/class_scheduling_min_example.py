@@ -3,11 +3,11 @@ import sqlite3
 #Error catching try-except statement for external library presence.
 try:
     from tabulate import tabulate
-except ImportError:
+except ModuleNotFoundError:
     print("Tabulate libray required and missing, install with 'pip install tabulate'.")
 try:
     from easygui import fileopenbox
-except ImportError:
+except ModuleNotFoundError:
     print("easygui libray required and missing, install with 'pip install easygui'.")
 #Constant Zoo
 MUTATION_RATE = 6
