@@ -11,7 +11,7 @@ TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 10
-DATABASE = "genetic/min_example/class_scheduling_min_example.db"
+DATABASE = "min_example/class_scheduling_min_example.db"
 
 
 class random_number_generator():
@@ -195,7 +195,11 @@ def tournament_selection(tournament_attendees: population) -> list:
 def table_display(sched):
     '''Formats the data into a pretty-print table for outputing.''' 
     table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
-    print(tabulate(table, headers=[feature.upper() for feature in sched.get_classes_printable()[0]]))
+    for i in table:
+        del i[3] 
+    head = [feature.upper() for feature in sched.get_classes_printable()[0]]
+    del head[3]
+    print(tabulate(table, headers=head))
 
 def main():
     gen = 0
