@@ -5,13 +5,17 @@ try:
     from tabulate import tabulate
 except ImportError:
     print("Tabulate libray required and missing, install with 'pip install tabulate'.")
+try:
+    from easygui import fileopenbox
+except ImportError:
+    print("easygui libray required and missing, install with 'pip install easygui'.")
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 10
-DATABASE = "min_example/class_scheduling_min_example.db"
+DATABASE = fileopenbox()
 
 
 class random_number_generator():
