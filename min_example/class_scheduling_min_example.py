@@ -4,11 +4,11 @@ import sqlite3
 try:
     from tabulate import tabulate
 except ModuleNotFoundError:
-    print("Tabulate libray required and missing, install with 'pip install tabulate'.")
+    raise ModuleNotFoundError("Tabulate libray required and missing, install with 'pip install tabulate'.")
 try:
-    from easygui import fileopenbox
+    import easyui
 except ModuleNotFoundError:
-    print("easygui libray required and missing, install with 'pip install easygui'.")
+    raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
