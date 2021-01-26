@@ -6,7 +6,7 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError("Tabulate libray required and missing, install with 'pip install tabulate'.")
 try:
-    import easyui
+    from easygui import fileopenbox
 except ModuleNotFoundError:
     raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
 #Constant Zoo
@@ -15,6 +15,7 @@ TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 10
+print("Select the database to be used...")
 DATABASE = fileopenbox()
 
 
@@ -73,8 +74,8 @@ class data:
         conn = None
         try:#Attempt to open the database file.
             conn = sqlite3.connect(db_file)
-        except sqlite3.Error as e:#Catches a raised error, e.g. for bad filepath or corrupted DB, and displays it.
-            print(e)
+        except:#Catches a raised error, e.g. for bad filepath or corrupted DB, and displays it.
+            raise Exception("Bad or no DB selected")
         return conn
 
     def __init__(self):
