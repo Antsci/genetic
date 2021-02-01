@@ -9,6 +9,10 @@ try:
     from easygui import fileopenbox
 except ModuleNotFoundError:
     raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
+try:
+    from pylatex import Document, LongTable, MultiColumn
+except ModuleNotFoundError:
+    raise ModuleNotFoundError("pylatex libray required and missing, install with 'pip install pylatex'.")
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
@@ -200,11 +204,34 @@ def tournament_selection(tournament_attendees: population) -> list:
 def table_display(sched):
     '''Formats the data into a pretty-print table for outputing.''' 
     table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
+    #Get_classes_printable() returns an array of dictionaries each holding as key:value pairs the attributes of a schedule.
+    #The list comprehension then iterates through the array, turning the
     for i in table:
         del i[3] 
     head = [feature.upper() for feature in sched.get_classes_printable()[0]]
     del head[3]
     print(tabulate(table, headers=head))
+
+# def genenerate_longtabu():
+#     geometry_options = {
+#         "margin": "2.54cm",
+#         "includeheadfoot": True
+#     }
+#     doc = Document(page_numbers=True, geometry_options=geometry_options)
+
+#     # Generate data table
+#     with doc.create(LongTable("l l l")) as data_table:
+#             data_table.add_hline()
+#             data_table.add_row(["header 1", "header 2", "header 3"])
+#             data_table.add_hline()
+#             data_table.end_table_header()         
+#             row = ["Content1", "9", "Longer String"]
+#             for i in range(10):
+#                 data_table.add_row(row)
+
+#     doc.generate_pdf("longtable", clean_tex=False)
+
+# genenerate_longtabu()
 
 def main():
     gen = 0
