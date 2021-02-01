@@ -143,7 +143,8 @@ class schedule:
                 conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
-            #if 
+            if (k.times[0][:3] == k.times[1][:3]) and (k.times[0][:3] == k.times[2][:3]):#If the subject would be taught thrice on the same day.
+                conflicts += 1
         return 1 / conflicts if conflicts != 0 else 2
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
