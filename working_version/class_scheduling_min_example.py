@@ -20,8 +20,13 @@ ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 10
 print("Select the database to be used...")
-DATABASE = fileopenbox()
-
+try:
+    DATABASE = fileopenbox(default="c:/*/*.db", title="Select database file")
+except: 
+    raise Exception("File selected is not an SQL database")
+else:
+    if DATABASE == None:
+        raise Exception("No file selected, closing program")
 
 class random_number_generator():
     '''Random number generation object, using LCG method.'''
@@ -138,6 +143,7 @@ class schedule:
                 conflicts += 1
             if k.subject[0] not in k.teacher[1:3]:#If the subject is not a speciality of the teacher.
                 conflicts += 1
+            #if 
         return 1 / conflicts if conflicts != 0 else 2
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
