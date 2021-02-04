@@ -1,18 +1,22 @@
 from time import time
 import sqlite3
+
 #Error catching try-except statement for external library presence.
 try:
     from tabulate import tabulate
 except ModuleNotFoundError:
     raise ModuleNotFoundError("Tabulate libray required and missing, install with 'pip install tabulate'.")
+
 try:
     from easygui import fileopenbox
 except ModuleNotFoundError:
     raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
+
 try:
     from pylatex import Document, LongTable, MultiColumn
 except ModuleNotFoundError:
     raise ModuleNotFoundError("pylatex libray required and missing, install with 'pip install pylatex'.")
+
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
@@ -27,6 +31,7 @@ except:
 else:
     if DATABASE == None:
         raise Exception("No file selected, closing program")
+
 
 class random_number_generator():
     '''Random number generation object, using LCG method.'''
@@ -45,7 +50,9 @@ class random_number_generator():
         '''Returns random selection from given iterable. '''
         return deck[next(self.random_int()) % len(deck)]#Casts the random output into the given modulus base for use as an indice.
 
+
 my_random = random_number_generator()
+
 
 def sorter(scheds: list) -> list:
     '''Recursive implementation of merge sort.'''
@@ -87,6 +94,7 @@ class data:
             raise Exception("Bad or no DB selected")
         return conn
 
+
     def __init__(self):
         conn = self.create_connection(DATABASE)#Create a connection to the database. 
         with conn:#Using this connection retrive the data from the relevant tables into attributes of this class.
@@ -104,11 +112,11 @@ class data:
         d_timeslots = [[(u[0] + ' ' + str((i)) + ":00") for i in range(8, u[1])] for u in days]
         #Iterate through each day in the list, for each day generate a time slot with the day name and start time for each hour between 8 and the day's end.
         self.timeslots = [y for x in d_timeslots for y in x] #flattens d_timeslots into 1D list.
-  
+
+
 school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
 class population:
     '''The competing schedules.'''
-
     def __init__(self, empty = False):
         if not empty:#Unless declared on instantiation, fill the population container with new schedules.
             self.pops = [schedule() for i in range(POPULATION_SIZE)]
@@ -148,9 +156,11 @@ class schedule:
         return 1 / conflicts if conflicts != 0 else 2
         #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
+
     def __str__(self):#Allows schedule to be directly printed using python magic methods
         return str(self.get_classes_printable())
         
+
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
        #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
@@ -165,9 +175,11 @@ class teaching_class:
         self.subject = subject
         self.name = name
 
+
     def get_class_printable(self):
         return self.__dict__
          #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
+
 
 def evolution(pop: population) -> population :
     evolution_pop = population(True)#Creates empty population.
@@ -239,6 +251,7 @@ def table_display(sched):
 #     doc.generate_pdf("longtable", clean_tex=False)
 
 # genenerate_longtabu()
+
 
 def main():
     gen = 0
