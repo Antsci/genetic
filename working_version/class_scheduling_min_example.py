@@ -17,16 +17,19 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError("pylatex libray required and missing, install with 'pip install pylatex'.")
 
+
 #Constant Zoo
 MUTATION_RATE = 6
 TOURNAMENT_SIZE = 3
 ELITE = 1
 POPULATION_SIZE = 10
 LAST_YEAR = 10
-print("Select the database to be used...")
+
+
 try:
+    print("Select the database to be used...")
     DATABASE = fileopenbox(default="c:/*/*.db", title="Select database file")
-except: 
+except:
     raise Exception("File selected is not an SQL database")
 else:
     if DATABASE == None:
@@ -96,7 +99,7 @@ class data:
 
 
     def __init__(self):
-        conn = self.create_connection(DATABASE)#Create a connection to the database. 
+        conn = self.create_connection(DATABASE)#Create a connection to the database.
         with conn:#Using this connection retrive the data from the relevant tables into attributes of this class.
             cur = conn.cursor()
             cur.execute("SELECT * FROM Departments")
@@ -159,13 +162,13 @@ class schedule:
 
     def __str__(self):#Allows schedule to be directly printed using python magic methods
         return str(self.get_classes_printable())
-        
+
 
     def get_classes_printable(self) -> list:
        return [i.__dict__ for i in self.classes]
        #__dict__ is an innate meta-attribute of all python objects, it is a dictionary holding all the object's other attributes as key:value pairs.
 
-        
+
 class teaching_class:
     '''With who, when, on what and where the class is.'''
     def __init__(self, teacher, times, room, subject, name):
@@ -189,7 +192,7 @@ def evolution(pop: population) -> population :
         parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))#cross these two schedules over to produce a child schedule
     evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
-    for i in range(POPULATION_SIZE - 2 * ELITE):#mutate the least fit schedules 
+    for i in range(POPULATION_SIZE - 2 * ELITE):#mutate the least fit schedules
         evolution_pop.pops[i] = mutate(evolution_pop.pops[i])
     evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
     return evolution_pop
@@ -206,7 +209,7 @@ def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
 def mutate(input_schedule: schedule) -> schedule:
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate.'''
     random_schedule = schedule()#instantiates a new schedule with random characteristics.
-    for i in range(len(input_schedule.classes)):#Iterates through the random schedule's classes. 
+    for i in range(len(input_schedule.classes)):#Iterates through the random schedule's classes.
         a = my_random.random_choice(range(10))#Randomly picks a number 0-9.
         if a < MUTATION_RATE:#If said number is below this then replace the input schedule's class at this indice with a random one.
             input_schedule.classes[i] = random_schedule.classes[i]
@@ -221,12 +224,12 @@ def tournament_selection(tournament_attendees: population) -> list:
 
 
 def table_display(sched):
-    '''Formats the data into a pretty-print table for outputing.''' 
+    '''Formats the data into a pretty-print table for outputing.'''
     table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
     #Get_classes_printable() returns an array of dictionaries each holding as key:value pairs the attributes of a schedule.
     #The list comprehension then iterates through the array, turning the
     for i in table:
-        del i[3] 
+        del i[3]
     head = [feature.upper() for feature in sched.get_classes_printable()[0]]
     del head[3]
     print(tabulate(table, headers=head))
@@ -243,7 +246,7 @@ def table_display(sched):
 #             data_table.add_hline()
 #             data_table.add_row(["header 1", "header 2", "header 3"])
 #             data_table.add_hline()
-#             data_table.end_table_header()         
+#             data_table.end_table_header()
 #             row = ["Content1", "9", "Longer String"]
 #             for i in range(10):
 #                 data_table.add_row(row)
