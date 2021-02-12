@@ -114,7 +114,7 @@ class data:
             days = cur.fetchall()
         d_timeslots = [[f"{u[0]} {i}:00" for i in range(8, u[1])] for u in days]
         #Iterate through each day in the list, for each day generate a time slot with the day name and start time for each hour between 8 and the day's end.
-        self.timeslots = [y for x in d_timeslots for y in x] #flattens d_timeslots into 1D list.
+        self.timeslots = [y for x in d_timeslots for y in x] #Flattens d_timeslots into 1D list.
 
 
 school_data = data()#Imports the data about the school, teachers, rooms, time-slots, etc.
@@ -157,7 +157,7 @@ class schedule:
             if (k.times[0][:3] == k.times[1][:3]) and (k.times[0][:3] == k.times[2][:3]):#If the subject would be taught thrice on the same day.
                 conflicts += 1
         return 1 / conflicts if conflicts != 0 else 2
-        #conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
+        #Conflicts are opposite to fitness so its fitness is the reciprocal of the conflicts
 
 
     def __str__(self):#Allows schedule to be directly printed using python magic methods
@@ -191,16 +191,16 @@ def evolution(pop: population) -> population :
         parent1 = tournament_selection(pop)#Pick two schedules using tournament selection.
         parent2 = tournament_selection(pop)
         evolution_pop.pops.append(crossover(parent1, parent2))#cross these two schedules over to produce a child schedule
-    evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
-    for i in range(POPULATION_SIZE - 2 * ELITE):#mutate the least fit schedules
+    evolution_pop.pops = sorter(evolution_pop.pops)#Sort the population by fitness
+    for i in range(POPULATION_SIZE - 2 * ELITE):#Mutate the least fit schedules
         evolution_pop.pops[i] = mutate(evolution_pop.pops[i])
-    evolution_pop.pops = sorter(evolution_pop.pops)#sort the population by fitness
+    evolution_pop.pops = sorter(evolution_pop.pops)#Sort the population by fitness
     return evolution_pop
 
 
 def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
     '''Assigns characteristics from the two parent schedules, at 50/50, to the child schedule.'''
-    child = schedule()#instantiates the child schedule
+    child = schedule()#Instantiates the child schedule
     child.classes = [schedule1.classes[i] if (next(my_random.random_int()) % 2 == 0) else schedule2.classes[i] for i in range(len(schedule1.classes))]
     #A list comprehension that generates a random integer, if said integer is even then the child uses parent1's values for that class, else it uses parent2's values.
     return child #Returns the child schedule with the new class list as determined by the previous line.
@@ -208,7 +208,7 @@ def crossover(schedule1: schedule, schedule2: schedule) -> schedule:
 
 def mutate(input_schedule: schedule) -> schedule:
     '''Generates a new schedule with random characteristics and assigns them to the mutant at a rate defined by the mutation rate.'''
-    random_schedule = schedule()#instantiates a new schedule with random characteristics.
+    random_schedule = schedule()#Instantiates a new schedule with random characteristics.
     for i in range(len(input_schedule.classes)):#Iterates through the random schedule's classes.
         a = my_random.random_choice(range(10))#Randomly picks a number 0-9.
         if a < MUTATION_RATE:#If said number is below this then replace the input schedule's class at this indice with a random one.
@@ -218,7 +218,7 @@ def mutate(input_schedule: schedule) -> schedule:
 
 def tournament_selection(tournament_attendees: population) -> list:
     '''Selects K, in this case 3, random schedules from the inputted schedules and ranks them by fitness and returns them.'''
-    tournament_competitors = population(True)#instantiates an empty population container.
+    tournament_competitors = population(True)#Instantiates an empty population container.
     tournament_competitors.pops = [my_random.random_choice(tournament_attendees.pops) for _ in range(TOURNAMENT_SIZE)]#Randomly selects schedules from the general populace.
     return sorter(tournament_competitors.pops)[-1]#Return the fittest of the selected schedules.
 
@@ -259,14 +259,14 @@ def table_display(sched):
 def main():
     gen = 0
     print("Creating intial population... ")
-    competing_population = population()
-    sched_fitness = [i.get_fitness() for i in competing_population.pops]
+    competing_population = population()#Generate the intial population.
+    sched_fitness = [i.get_fitness() for i in competing_population.pops]#Creates an array with fitnesses.
     print("Optimising timetables... ")
-    while 2 not in sched_fitness:
+    while 2 not in sched_fitness:#Halt on a perfect schedule.
         gen += 1
-        competing_population = evolution(competing_population)
-        sched_fitness = [i.get_fitness() for i in competing_population.pops]
-    table_display(sorter(competing_population.pops)[-1])
+        competing_population = evolution(competing_population)#Evolve the population.
+        sched_fitness = [i.get_fitness() for i in competing_population.pops]#Creates an array with fitnesses.
+    table_display(sorter(competing_population.pops)[-1])#Display the fittest ergo perfect schedule.
     print(f"This input took {gen} generations to find a solution." )
 
 
