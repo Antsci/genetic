@@ -112,7 +112,7 @@ class data:
             self.teachers = cur.fetchall()
             cur.execute("SELECT * FROM Days")
             days = cur.fetchall()
-        d_timeslots = [[(u[0] + ' ' + str((i)) + ":00") for i in range(8, u[1])] for u in days]
+        d_timeslots = [[f"{u[0]} {i}:00" for i in range(8, u[1])] for u in days]
         #Iterate through each day in the list, for each day generate a time slot with the day name and start time for each hour between 8 and the day's end.
         self.timeslots = [y for x in d_timeslots for y in x] #flattens d_timeslots into 1D list.
 
@@ -137,7 +137,7 @@ class schedule:
                 slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]#Randomly picks three unique timeslots.
                 while len(set(slots)) != len(slots):
                     slots = [my_random.random_choice(school_data.timeslots) for _ in range(3)]
-                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), slots, my_random.random_choice(school_data.rooms), i, "year "+str(j)+" "+i[1]))
+                self.classes.append(teaching_class(my_random.random_choice(school_data.teachers), slots, my_random.random_choice(school_data.rooms), i, f"year {j} {i[1]}"))
                 #Generates a class with a randomly selected room, teacher and timeslot.
 
 
@@ -267,7 +267,7 @@ def main():
         competing_population = evolution(competing_population)
         sched_fitness = [i.get_fitness() for i in competing_population.pops]
     table_display(sorter(competing_population.pops)[-1])
-    print("This input took " + str(gen) + " generations to find a solution." )
+    print(f"This input took {gen} generations to find a solution." )
 
 
 if __name__ == '__main__':
