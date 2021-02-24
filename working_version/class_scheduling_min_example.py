@@ -1,4 +1,4 @@
-from time import time
+from time import time, localtime, strftime
 import sqlite3
 
 #Error catching try-except statement for external library presence.
@@ -13,7 +13,7 @@ except ModuleNotFoundError:
     raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
 
 try:
-    from pylatex import Document, LongTable, MultiColumn
+    from pylatex import Document, LongTable, LargeText
 except ModuleNotFoundError:
     raise ModuleNotFoundError("pylatex libray required and missing, install with 'pip install pylatex'.")
 
@@ -232,28 +232,22 @@ def table_display(sched):
         del i[3]
     head = [feature.upper() for feature in sched.get_classes_printable()[0]]
     del head[3]
+    genenerate_longtable(table, head)
     print(tabulate(table, headers=head))
 
-# def genenerate_longtabu():
-#     geometry_options = {
-#         "margin": "2.54cm",
-#         "includeheadfoot": True
-#     }
-#     doc = Document(page_numbers=True, geometry_options=geometry_options)
+def genenerate_longtable(rows, headers):
+    geometry_options = {"margin": "2.54cm", "includeheadfoot": True}
+    doc = Document(page_numbers=True, geometry_options=geometry_options)
+    with doc.create(LongTable("l l l l")) as data_table:
+            data_table.add_hline()
+            data_table.add_row(headers)
+            data_table.add_hline()
+            data_table.end_table_header()
+            for i in rows:
+                data_table.add_row(i)
+    date = strftime('%a, %d %b %Y', localtime())
+    doc.generate_pdf(f"School timetable as of {date}", clean_tex=False)
 
-#     # Generate data table
-#     with doc.create(LongTable("l l l")) as data_table:
-#             data_table.add_hline()
-#             data_table.add_row(["header 1", "header 2", "header 3"])
-#             data_table.add_hline()
-#             data_table.end_table_header()
-#             row = ["Content1", "9", "Longer String"]
-#             for i in range(10):
-#                 data_table.add_row(row)
-
-#     doc.generate_pdf("longtable", clean_tex=False)
-
-# genenerate_longtabu()
 
 
 def main():
