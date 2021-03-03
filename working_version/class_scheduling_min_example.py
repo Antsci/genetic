@@ -13,7 +13,7 @@ except ModuleNotFoundError:
     raise ModuleNotFoundError("easygui libray required and missing, install with 'pip install easygui'.")
 
 try:
-    from pylatex import Document, LongTable, LargeText
+    from pylatex import Document, LongTable
 except ModuleNotFoundError:
     raise ModuleNotFoundError("pylatex libray required and missing, install with 'pip install pylatex'.")
 
