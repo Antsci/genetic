@@ -225,7 +225,7 @@ def tournament_selection(tournament_attendees: population) -> list:
 
 def table_display(sched):
     '''Formats the data into a pretty-print table for outputing.'''
-    table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
+    table = [[teach_class[feature][-1] if isinstance(teach_class[feature], tuple) and len(teach_class[feature]) != 2 else teach_class[feature] for feature in teach_class] for teach_class in sched.get_classes_printable()]
     #Get_classes_printable() returns an array of dictionaries each holding as key:value pairs the attributes of a schedule.
     #The list comprehension then iterates through the array, turning the
     for i in table:
