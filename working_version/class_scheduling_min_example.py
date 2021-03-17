@@ -236,17 +236,17 @@ def table_display(sched):
     print(tabulate(table, headers=head))
 
 def genenerate_longtable(rows, headers):
-    geometry_options = {"margin": "2.54cm", "includeheadfoot": True}
-    doc = Document(page_numbers=True, geometry_options=geometry_options)
-    with doc.create(LongTable("l l l l")) as data_table:
+    geometry_options = {"margin": "2.54cm", "includeheadfoot": True}#sets out table dimensions
+    doc = Document(page_numbers=True, geometry_options=geometry_options)#Instantiates a new table
+    with doc.create(LongTable("l l l l")) as data_table:#sets number of columns 
             data_table.add_hline()
-            data_table.add_row(headers)
+            data_table.add_row(headers)#adding columns titles
             data_table.add_hline()
             data_table.end_table_header()
             for i in rows:
-                data_table.add_row(i)
-    date = strftime('%a, %d %b %Y', localtime())
-    doc.generate_pdf(f"School timetable as of {date}", clean_tex=False)
+                data_table.add_row(i)#add class details
+    date = strftime('%a, %d %b %Y', localtime())#transforms computer date to gregorian
+    doc.generate_pdf(f"School timetable as of {date}", clean_tex=False)#generates PDF with dated name
 
 
 
