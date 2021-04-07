@@ -1,5 +1,5 @@
 from time import time, localtime, strftime
-import sqlite3
+from sqlite3 import connect
 
 #Error catching try-except statement for external library presence.
 try:
@@ -28,12 +28,12 @@ LAST_YEAR = 10
 
 try:
     print("Select the database to be used...")
-    DATABASE = fileopenbox(default="c:/*/*.db", title="Select database file")
+    DATABASE = fileopenbox(default="c:/*/*.db", title="File selection prompt", msg="Select the database file to be used")
 except:
-    raise Exception("File selected is not an SQL database")
+    raise Exception("File selected is not an SQL database.")
 else:
     if DATABASE == None:
-        raise Exception("No file selected, closing program")
+        raise Exception("No file selected, closing program.")
 
 
 class random_number_generator():
@@ -92,7 +92,7 @@ class data:
     def create_connection(self, db_file):
         conn = None
         try:#Attempt to open the database file.
-            conn = sqlite3.connect(db_file)
+            conn = connect(db_file)
         except:#Catches a raised error, e.g. for bad filepath or corrupted DB, and displays it.
             raise Exception("Bad or no DB selected")
         return conn
