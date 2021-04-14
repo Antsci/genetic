@@ -263,7 +263,7 @@ def main():
         sched_fitness = [i.get_fitness() for i in competing_population.pops]#Creates an array with fitnesses.
     table_display(sorter(competing_population.pops)[-1])#Display the fittest ergo perfect schedule.
     print(f"This input took {gen} generations to find a solution.")
-    print("And took  %s seconds" % (process_time() - start_time))
+    print(f"And took {process_time() - start_time} seconds")
 
 
 if __name__ == '__main__':
