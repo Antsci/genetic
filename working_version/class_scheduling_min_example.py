@@ -1,4 +1,4 @@
-from time import time, localtime, strftime
+from time import time, localtime, strftime, process_time
 from sqlite3 import connect
 
 #Error catching try-except statement for external library presence.
@@ -238,7 +238,7 @@ def table_display(sched):
 def genenerate_longtable(rows, headers):
     geometry_options = {"margin": "2.54cm", "includeheadfoot": True}#sets out table dimensions
     doc = Document(page_numbers=True, geometry_options=geometry_options)#Instantiates a new table
-    with doc.create(LongTable("l l l l")) as data_table:#sets number of columns 
+    with doc.create(LongTable("l l l l")) as data_table:#sets number of columns
             data_table.add_hline()
             data_table.add_row(headers)#adding columns titles
             data_table.add_hline()
@@ -251,6 +251,7 @@ def genenerate_longtable(rows, headers):
 
 
 def main():
+    start_time = process_time()
     gen = 0
     print("Creating intial population... ")
     competing_population = population()#Generate the intial population.
@@ -261,7 +262,8 @@ def main():
         competing_population = evolution(competing_population)#Evolve the population.
         sched_fitness = [i.get_fitness() for i in competing_population.pops]#Creates an array with fitnesses.
     table_display(sorter(competing_population.pops)[-1])#Display the fittest ergo perfect schedule.
-    print(f"This input took {gen} generations to find a solution." )
+    print(f"This input took {gen} generations to find a solution.")
+    print("And took  %s seconds" % (process_time() - start_time))
 
 
 if __name__ == '__main__':
